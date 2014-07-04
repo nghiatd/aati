@@ -39,6 +39,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 		);
 		
 		$backend = array ('cache_dir' => '../application/tmp');
+
+		
 		$cache = Zend_Cache::factory('core', 'File', $frontend, $backend);
 		Zend_Registry::set('cache', $cache);
 	}
