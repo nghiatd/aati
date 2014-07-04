@@ -1,0 +1,54 @@
+<div id="breadcrumb">
+    <ul>
+        <li><a href="#">Home</a></li>
+        <li class="separate"></li>
+        <li class="current"><a href="#">News</a></li>
+    </ul>
+</div>
+<div class="content_news_left fl">
+    <div id="the_news">
+        <?php
+            $row = $this->lasteventID[0];
+        ?>
+        <div class="title_block_news"><span class="text">Last Event</span></div>
+        
+        <div class="content_block_news_detail">
+            <span class="time"><?php echo date("l, d F Y", strtotime($row['date'])); ?></span>
+            <div class="title_news"><?php echo $row['title']; ?></div>
+            <span class="author">Written by <a > <?php echo $row['author'] ?></a></span>
+            <div class="content_news">
+                <?php echo $row['content']; ?>
+            </div>
+            
+            
+            
+        </div>
+        <?php if(isset($this->oldNews) && count($this->oldNews)>0){ ?>
+        <div class="older_news">
+            <div class="title">Older news</div>
+            <div class="content">
+                <ul>
+                    <?php
+                        $i=1;
+                        foreach ($this->oldNews as $row) {
+                            if($i++==count($this->oldNews)){
+                                break;
+                            }
+                            echo "<li><a href=\"#\">".$row['title']."</a></li>";
+                        }
+                    ?>
+                </ul>
+            </div>
+        </div>
+        <?php }?>
+    </div>
+
+</div>
+<div class="content_news_right fr">
+    <div class="block_right_news">
+        <div class="title"><span class="text">News</span></div>
+    </div>
+    <?php require ("block_login.phtml"); ?>
+    <?php require ("block_important.phtml"); ?>
+    <?php require ("block_connect.phtml"); ?>
+</div>

@@ -1,0 +1,115 @@
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        var baseUrl = jQuery("#baseUrl").val();
+        CKEDITOR.replace( 'description',{
+            filebrowserBrowseUrl : 'http://'+baseUrl+'/public/ckeditor/ckfinder/ckfinder.html?id=demo3',
+            filebrowserImageBrowseUrl : 'http://'+baseUrl+'/public/ckeditor/ckfinder/ckfinder.html?Type=Images&id=demo3',
+            filebrowserFlashBrowseUrl : 'http://'+baseUrl+'/public/ckeditor/ckfinder/ckfinder.html?Type=Flash&id=demo3',
+            filebrowserUploadUrl : 'http://'+baseUrl+'/public/ckeditor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files&currentFolder=/Public%20Folder&id=demo3',
+            filebrowserImageUploadUrl : 'http://'+baseUrl+'/public/ckeditor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images&currentFolder=/Public%20Folder&id=demo3',
+            filebrowserFlashUploadUrl : 'http://'+baseUrl+'/public/ckeditor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash&currentFolder=/Public%20Folder&id=demo3'
+        });
+    });
+    
+</script>
+<div class="grid_4">
+    <div class="grid_4">
+        <div class="da-panel">
+            <div class="da-panel-header">
+                <span class="da-panel-title">
+                    <img src="images/icons/black/16/pencil.png" alt="" />
+                    View infomation account
+                    <a href="<?php echo $this->url(array ( 'action'=> 'user','controller'=> 'index', 'module'=> 'admin') ); ?>" class="da-tooltip-sw da-button gray" id="da-ex-dialog-form" value="Back" original-title="Click here to back">Back</a>
+                </span>
+            </div>
+            <?php $result = $this->data[0];?>
+            <div class="da-panel-content">
+                <form class="da-form" id="da-ex-dialog-form-val">
+                    
+                    <div class="da-form-row">
+                        <label>Company:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="company" disabled="disabled" name="company" value="<?php echo $result['company']; ?>"/>
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Logo:</label>
+                        <div class="da-form-item">
+                            <img width="300" height="230px" src="<?php echo 'http://'.URL_CONFIG.$result['logo']; ?>" alt="logo">
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Address:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="address" disabled="disabled" name="address" value="<?php echo $result['address']; ?>" />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Description:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="description" disabled="disabled" name="description" value="<?php echo $result['description']; ?>" />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Email:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="email" disabled="disabled" name="email" value="<?php echo $result['email']; ?>" />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Phone:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="phone" disabled="disabled" name="phone" value="<?php echo $result['phone']; ?>" />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Fax:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="fax" disabled="disabled" name="fax" value="<?php echo $result['fax']; ?>" />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Website:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="website" disabled="disabled" name="website" value="<?php echo $result['phone']; ?>" />
+                        </div>
+                    </div>
+                    
+                    <div class="da-panel">
+            <div class="da-panel-header">
+                <span class="da-panel-title">
+                    <img src="images/icons/color/cog.png" alt="" />
+                    Edit account
+                </span>
+            </div>
+            <div class="da-panel-content">
+                <form class="da-form">
+                    <div class="da-form-row">
+                        <label>Username:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="username" disabled="disabled" name="username" value="<?php echo $result['username']; ?>"  />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Status:</label>
+                        <div class="da-form-item small">
+                            <select name="reqStatus" id="statuss">
+                                <?php
+                                    if($result['status']==1){
+                                        echo "<option value=\"1\" selected='selected'>Enable</option>";
+                                    }else{
+                                        echo "<option value=\"0\" selected='selected'>Disable</option>";
+                                    }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+</div>

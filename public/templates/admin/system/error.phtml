@@ -1,0 +1,15 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<?php echo $this->doctype(); ?> 
+<head>
+	<?php echo $this->headMeta()->appendHttpEquiv('Content-Type', 'text/html;charset=utf-8');?>
+    <?php echo $this->headMeta(); ?> 
+    <?php echo $this->headTitle(); ?>
+    <?= $this->headLink(); ?>
+   	<?= $this->headScript(); ?>
+</head>
+<body>
+<div id="content">
+    <?php echo $this->layout()->content; ?>
+</div>
+</body>
+</html>

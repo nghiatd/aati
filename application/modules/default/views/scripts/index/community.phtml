@@ -1,0 +1,114 @@
+<?php require("common.php"); ?>
+<div id="breadcrumb">
+    <ul>
+        <li><a href="<?php echo $this->url(array ( 'action'=> 'index','controller'=> 'index', 'module'=> 'default'),null,true )?>" title="Home">Home</a></li>
+        <li class="separate"></li>
+        <li><a href="" title="Community Resources">Community Resources</a></li>
+        <li class="separate"></li>
+        <li class="current"><a href="" title="<?php echo $this->typeCommunityID[0]['name']; ?>"><?php echo splitString($this->typeCommunityID[0]['name'],30); ?></a></li>
+    </ul>
+</div>
+<div class="content_news_left fl">
+    <div id="about">
+        <div class="title_block_about"><span class="text">
+            <?php
+                if(isset($this->typeCommunityID) && count($this->typeCommunityID)>0){
+                    echo $this->typeCommunityID[0]['name'];
+                }
+            ?>
+        </span></div>
+        
+        <div class="content_block_community">
+            <?php
+                if(isset($this->data) && count($this->data)>0){
+                    $i=0;
+                    foreach ($this->data as $result) {
+                        if($i++==count($this->data)){?>
+                            <div class="items_community last">
+                                <span class="time"><?php echo date("l, d F Y", strtotime($result['date'])); ?></span>
+                                <span class="title"><a href="<?php echo $this->url(array ( 'action'=> 'communitydetail','controller'=> 'index', 'module'=> 'default','gid'=>$result['typeid'],'id'=>$result['id']) ); ?>"><?php echo $result['title']; ?></a></span>
+                                <span class="author">Written by <a href="<?php echo $this->url(array ( 'action'=> 'community','controller'=> 'index', 'module'=> 'default','au'=>$result['author']) ); ?>"> <?php echo $result['author'] ?></a></span>
+                                <div class="description"><?php echo $result['description']; ?></div>
+                                <div class="readmore fr">
+                                    <a href="<?php echo $this->url(array ( 'action'=> 'communitydetail','controller'=> 'index', 'module'=> 'default','gid'=>$result['typeid'],'id'=>$result['id']) ); ?>"></a>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        <?php }else{?>
+                            <div class="items_community">
+                                <span class="time"><?php echo date("l, d F Y", strtotime($result['date'])); ?></span>
+                                <span class="title"><a href="<?php echo $this->url(array ( 'action'=> 'communitydetail','controller'=> 'index', 'module'=> 'default','gid'=>$result['typeid'],'id'=>$result['id']) ); ?>"><?php echo $result['title']; ?></a></span>
+                                <span class="author">Written by <a href="<?php echo $this->url(array ( 'action'=> 'community','controller'=> 'index', 'module'=> 'default','au'=>$result['author']) ); ?>"> <?php echo $result['author'] ?></a></span>
+                                <div class="description"><?php echo $result['description']; ?></div>
+                                <div class="readmore fr">
+                                    <a href="<?php echo $this->url(array ( 'action'=> 'communitydetail','controller'=> 'index', 'module'=> 'default','gid'=>$result['typeid'],'id'=>$result['id'])); ?>"></a>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                    <?php
+                        }
+                    }
+
+                }
+            ?>
+        </div>
+        <?php if(isset($this->oldCommunity) && count($this->oldCommunity)>0){ ?>
+        <div class="older_news" id="older_news">
+            <div class="title">Older news</div>
+            <div class="content" id="content_pagging">
+                <ul>
+                    <?php
+                        $i=0;
+                        foreach ($this->oldCommunity as $row) {
+                            if($i++==count($this->oldCommunity)){
+                                break;
+                            }
+                            echo "<li><a href=\"".$this->url(array ( 'action'=> 'communitydetail','controller'=> 'index', 'module'=> 'default','gid'=>$row['typeid'],'id'=>$row['id']) )."\">".$row['title']."</a></li>";
+                        }
+                    ?>
+                </ul>
+            </div>
+            <div class="pagging">
+                <ul></ul>
+            </div>
+        </div>
+        <?php }?>
+        <script type="text/javascript">
+            jQuery(document).ready(function() {
+                jQuery("#older_news").pajinate({
+                    items_per_page : 4,
+                    item_container_id : '#content_pagging ul',
+                    nav_panel_id : '.pagging ul',
+                    nav_label_first:'<< Start',
+                    nav_label_prev:'< Prev',
+                    nav_label_next:'Next >',
+                    nav_label_last:'Last >>'
+
+                });
+            });
+
+        </script>
+    </div>
+
+</div>
+<div class="content_news_right fr">
+    <div class="block_right_about">
+        <div class="title"><span class="text">Community Resources</span></div>
+        <div class="content_about">
+            <ul>
+                <?php
+                    if(isset($this->typecommunity) && count($this->typecommunity)>0){
+                        foreach ($this->typecommunity as $row) {?>
+                            <li><a href="<?php echo $this->url(array ( 'action'=> 'community','controller'=> 'index', 'module'=> 'default','gid'=>$row['id']) ); ?>"><?php echo $row['name']; ?></a></li>
+                    <?php
+                        }
+                    }
+                 ?>
+            </ul>
+
+        </div>
+    </div>
+    <?php require ("block_login.phtml"); ?>
+    <?php require ("block_important.phtml"); ?>
+    <?php require ("block_connect.phtml"); ?>
+</div>

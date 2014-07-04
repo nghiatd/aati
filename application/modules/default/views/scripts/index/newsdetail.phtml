@@ -1,0 +1,74 @@
+<?php require("common.php"); ?>
+<div id="breadcrumb">
+    <ul>
+        <li><a href="<?php echo $this->url(array ( 'action'=> 'index','controller'=> 'index', 'module'=> 'default'),null,true )?>" title="Home">Home</a></li>
+        <li class="separate"></li>
+        <li><a href="<?php echo $this->url(array ( 'action'=> 'news','controller'=> 'index', 'module'=> 'default'),null,true )?>" title="News">News</a></li>
+        <li class="separate"></li>
+        <li class="current"><a href="" title="<?php echo $this->normalID[0]['title'];?>"><?php echo splitString($this->normalID[0]['title'],30);?></a></li>
+    </ul>
+</div>
+<div class="content_news_left fl">
+    <div id="the_news">
+        <?php
+            $row = $this->normalID[0];
+        ?>
+        <div class="title_block_news"><span class="text">The News</span></div>
+        
+        <div class="content_block_news_detail">
+            <span class="time"><?php echo date("l, d F Y", strtotime($row['date'])); ?></span>
+            <div class="title_news"><?php echo $row['title']; ?></div>
+            <span class="author">Written by <a > <?php echo $row['author'] ?></a></span>
+            <div class="content_news">
+                <?php echo $row['content']; ?>
+                <div class="clearfix"></div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <?php if(isset($this->oldNews) && count($this->oldNews)>0){ ?>
+        <div class="older_news" id="older_news">
+            <div class="title">Older news</div>
+            <div class="content" id="content_pagging">
+                <ul>
+                    <?php
+                        $i=0;
+                        foreach ($this->oldNews as $row) {
+                            if($i++==count($this->oldNews)){
+                                break;
+                            }
+                            echo "<li><a href=\"".$this->url(array ( 'action'=> 'newsdetail','controller'=> 'index', 'module'=> 'default','id'=>$row['id']) )."\" title=\"".$row['title']."\">".splitString($row['title'],50)."</a></li>";
+                        }
+                    ?>
+                </ul>
+            </div>
+            <div class="pagging">
+                <ul></ul>
+            </div>
+        </div>
+        <?php }?>
+        <script type="text/javascript">
+        jQuery(document).ready(function() {
+            jQuery("#older_news").pajinate({
+                        items_per_page : 4,
+                        item_container_id : '#content_pagging ul',
+                        nav_panel_id : '.pagging ul',
+                        nav_label_first:'<< Start',
+                        nav_label_prev:'< Prev',
+                        nav_label_next:'Next >',
+                        nav_label_last:'Last >>'
+
+                    });
+        });
+        
+    </script>
+    </div>
+
+</div>
+<div class="content_news_right fr">
+    <div class="block_right_news">
+        <div class="title"><span class="text">News</span></div>
+    </div>
+    <?php require ("block_login.phtml"); ?>
+    <?php require ("block_important.phtml"); ?>
+    <?php require ("block_connect.phtml"); ?>
+</div>

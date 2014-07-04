@@ -1,0 +1,78 @@
+<div id="breadcrumb">
+    <ul>
+        <li><a href="#">Home</a></li>
+        <li class="separate"></li>
+        <li><a href="#">About</a></li>
+        <li class="separate"></li>
+        <li class="current"><a href="#">IBroard of directors</a></li>
+    </ul>
+</div>
+<div class="content_news_left fl">
+    <div id="about">
+        <div class="title_block_about"><span class="text">
+            MEMBERS LIST
+        </span></div>
+        
+        <div class="content_block_news_detail" id="list_membership">
+            <?php
+                if(isset($this->data) && count($this->data)>0){
+                    foreach ($this->data as $result) {?>
+                        <div class="items_about">
+                            <a href="<?php echo $this->url(array ( 'action'=> 'detailmembership','controller'=> 'index', 'module'=> 'default','id'=>$result['id']) ); ?>" class="img fl"><img style="width: 100px;height: 100px;" src="<?php echo 'http://'.URL_CONFIG.$result['logo']; ?>" alt="" /></a>
+                            <span class="name"><a href="<?php echo $this->url(array ( 'action'=> 'detailmembership','controller'=> 'index', 'module'=> 'default','id'=>$result['id']) ); ?>"><?php echo $result['company'];?></a></span>
+                            <span class="address"><?php echo $result['address']; ?></span>
+                            
+                            <div class="description"><?php echo $result['description']; ?></div>
+                            <div class="description">Tel: <?php echo $result['phone']; ?></div>
+                            <div class="description">Fax: <?php echo $result['fax']; ?></div>
+                            <div class="description">Email: <a href="mailto:<?php echo $result['email']; ?>"><?php echo $result['email']; ?></a></div>
+                            <div class="description">Website: <a href="<?php echo $result['website']; ?>"><?php echo $result['website']; ?></a></div>
+                            <div class="clearfix"></div>
+                        </div>
+                <?php
+                }
+            }
+            ?>
+        </div>
+        <div class="pagging">
+            <ul></ul>
+        </div>
+        <script type="text/javascript">
+            jQuery(document).ready(function() {
+                jQuery("#about").pajinate({
+                    items_per_page : 5,
+                    item_container_id : '#list_membership',
+                    nav_panel_id : '.pagging ul',
+                    nav_label_first:'<< Start',
+                    nav_label_prev:'< Prev',
+                    nav_label_next:'Next >',
+                    nav_label_last:'Last >>'
+
+                });
+            });
+
+        </script>
+    </div>
+
+</div>
+<div class="content_news_right fr">
+    <div class="block_right_about">
+        <div class="title"><span class="text">Membership</span></div>
+        <div class="content_about">
+            <ul>
+                <?php 
+                    if(isset($this->typeMembership)){  
+                        foreach ($this->typeMembership as $result) {?>
+                            <li><a href="<?php echo $this->url(array ( 'action'=> 'membership','controller'=> 'index', 'module'=> 'default','id'=>$result['id']) ); ?>"><?php echo $result['name']; ?></a></li>
+                    <?php
+                        }
+                    }
+                ?>
+                <li><a href="<?php echo $this->url(array ( 'action'=> 'listmembership','controller'=> 'index', 'module'=> 'default' )); ?>">List membership</a></li>
+            </ul>
+        </div>
+    </div>
+    <?php require ("block_login.phtml"); ?>
+    <?php require ("block_important.phtml"); ?>
+    <?php require ("block_connect.phtml"); ?>
+</div>

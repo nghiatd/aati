@@ -1,0 +1,72 @@
+<div class="grid_4">
+    <div class="da-panel collapsible">
+        <div class="da-panel-header">
+            <span class="da-panel-title">
+                <img src="images/icons/black/16/computer_imac.png" alt="Panel" />
+                Admin Management
+                <a href="<?php echo $this->url(array ( 'action'=> 'addadmin','controller'=> 'index', 'module'=> 'admin') ); ?>" class="da-tooltip-sw da-button gray" id="da-ex-dialog-form" value="Add new" original-title="Click here to add new a admin">Add new</a>
+            </span>
+            
+        </div>
+        <div class="da-panel-content">
+            <table id="da-ex-datatable-numberpaging" class="da-table">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Fullname</th>
+                        <th>Username</th>
+                        <th>Order</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                        if(count($this->data)>0){
+                            foreach ($this->data as $result){
+                                echo "<tr>";
+                                    echo "<td>".$result['id']."</td>";
+                                    echo "<td>".$result['fullname']."</td>";
+                                    echo "<td>".$result['username']."</td>";
+                                    echo "<td>".$result['perName']."</td>";
+                                    echo "<td class=\"da-icon-column\">";
+                                        echo "<a href=\"".$this->url(array ( 'action'=> 'viewadmin','controller'=> 'index', 'module'=> 'admin','id'=>$result['id']) )."\"><img src=\"images/icons/color/magnifier.png\" /></a>";
+                                        echo "<a href=\"".$this->url(array ( 'action'=> 'editadmin','controller'=> 'index', 'module'=> 'admin','id'=>$result['id']) )."\"><img src=\"images/icons/color/pencil.png\" /></a>";
+                                        echo "<a href=\"#\" class=\"deleteadmin\" id=\"".$result['id']."\"><img src=\"images/icons/color/cross.png\" /></a>";
+                                    echo "</td>";
+                                echo "</tr>";                                
+                            }
+                        }
+                     ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        jQuery(".deleteadmin").click(function(evt){
+            evt.preventDefault();
+            var choose = confirm("You are want to delete?");
+            if(choose){
+                var id = jQuery(this).attr('id');
+                jQuery.ajax({
+                    url:"<?php echo 'http://'.URL_CONFIG;?>/public/admin/index/deleteadmin",
+                    type:"POST",
+                    data:{id:id},
+                    success:function(result){
+                        if(result=="true"){
+                            alert("Delete account successfull");
+                            location.href="<?php echo 'http://'.URL_CONFIG;?>/public/admin/index/admin";
+                        }else{
+                            alert(result);
+                            return;
+                        }
+                                            
+                    }
+                });
+            }
+            
+        });
+    });
+    
+</script>

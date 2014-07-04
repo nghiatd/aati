@@ -1,0 +1,113 @@
+<div class="grid_4">
+    <h1>
+        <?php echo $this->heading;?></h1>
+    <div class="grid_4">
+        <div class="da-panel">
+            <div class="da-panel-header">
+                <span class="da-panel-title">
+                    <img src="images/icons/black/16/pencil.png" alt="" />
+                    View infomation account
+                    <a href="<?php echo $this->url(array ( 'action'=> 'admin','controller'=> 'index', 'module'=> 'admin') ); ?>" class="da-tooltip-sw da-button gray" id="da-ex-dialog-form" value="Back" original-title="Click here to back">Back</a>
+                </span>
+            </div>
+            <?php $result = $this->data[0];?>
+            <div class="da-panel-content">
+                <form class="da-form" id="da-ex-dialog-form-val">
+                    
+                    <div class="da-form-row">
+                        <label>Full name:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="fullname" disabled="disabled" name="fullname" value="<?php echo $result['fullname']; ?>"/>
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Birthday:</label>
+                        <div class="da-form-item">
+                            <input id="birthday" disabled="disabled" type="text" class="hasDatepicker" value="<?php echo $result['birthday']; ?>">
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Gender:</label>
+                        <div class="da-form-item large">
+                            <ul class="da-form-list">
+                                <?php
+                                    if($result['gender']==1){
+                                        echo "<li> <label><input type=\"radio\" name=\"gender\" checked=\"checked\">Male</label></li>
+                                <li> <label><input type=\"radio\" name=\"gender\">Female</label></li>";
+                                    }else{
+                                        echo "<li> <label><input type=\"radio\" name=\"gender\">Male</label></li>
+                                <li> <label><input type=\"radio\" name=\"gender\" checked=\"checked\">Female</label></li>";
+                                    }
+                                ?>
+                            </ul>
+                            <label for="gender" class="error" generated="true" style="display:none;"></label>
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Address:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="address" disabled="disabled" name="address" value="<?php echo $result['address']; ?>" />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Phone:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="phone" disabled="disabled" name="phone" value="<?php echo $result['phone']; ?>" />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Email:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="email" disabled="disabled" name="email" value="<?php echo $result['email']; ?>" />
+                        </div>
+                    </div>
+                    <div class="da-panel">
+            <div class="da-panel-header">
+                <span class="da-panel-title">
+                    <img src="images/icons/color/cog.png" alt="" />
+                    Edit account
+                </span>
+            </div>
+            <div class="da-panel-content">
+                <form class="da-form">
+                    <div class="da-form-row">
+                        <label>Username:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="username" disabled="disabled" name="username" value="<?php echo $result['username']; ?>"  />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Permission:</label>
+                        <div class="da-form-item small">
+                            <select name="dd1" id="idPer">
+                                <?php
+                                    echo "<option value=\"".$result['perID']."\">".$result['perName']."</option>";
+                                 ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Status:</label>
+                        <div class="da-form-item small">
+                            <select name="reqStatus" id="statuss">
+                                <?php
+                                    if($result['status']==1){
+                                        echo "<option value=\"1\" selected='selected'>Enable</option>
+                                <option value=\"0\">Disable</option>";
+                                    }else{
+                                        echo "<option value=\"1\">Enable</option>
+                                <option value=\"0\" selected='selected'>Disable</option>";
+                                    }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+</div>

@@ -1,0 +1,71 @@
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+      jQuery("form#da-ex-dialog-form-val").validate({
+            rules:{
+                email:{required:true,email:true}},
+            invalidHandler:function(f,d){
+                var g=d.numberOfInvalids();
+                if(g){var e=g==1?"You missed 1 field. It has been highlighted":"You missed "+g+" fields. They have been highlighted";
+                    jQuery("#da-validate-error").html(e).show()
+                }else{
+                    jQuery("#da-validate-error").hide()
+                }
+            },
+            success: function(label) {
+                 
+               },
+            submitHandler: function(form) { 
+                var email = jQuery("#email").val();
+                var datalist=new Array();
+                    datalist[0]= email;
+                    datalist[1]= 1;
+                jQuery.ajax({
+                    url:"<?php echo 'http://'.URL_CONFIG;?>/public/default/index/sendmail",
+                    type:"POST",
+                    data:{data:datalist},
+                    success:function(result){
+                        alert(result);
+                        form.submit();
+                    }
+                });
+            }
+        });
+    });
+    
+  </script>
+<div class="content_news_left fl">
+  <div class="lostpass">
+  <h3>FORGOT YOUR PASSWORD?</h3><br /><br />
+  
+    <form  action="" method="post" enctype="multipart/form-data" id="da-ex-dialog-form-val">
+      <table align="center" cellpadding="0" cellspacing="0">
+        <tbody>
+          
+        
+          <tr>
+         
+            <td  colspan="2"><div><span > Please enter the e-mail address for your account. A verification token will be sent to you. Once you have received the token, you will be able to choose a new password for your account.<br>
+              </span></div></td>
+          </tr>
+          <tr><td colspan="2"><br /></td></tr>
+          <tr>
+            <td> E-mail Address:</td>
+            <td class="boderemail" style="color:red" ><input  title="Email" name="email" id="email" style="width:200px;" maxlength="250" type="text">(*)</td>
+          </tr>
+         
+          <tr>
+            <td></td>
+            <td><input  value="submit" type="submit" style="padding:5px; margin:10px;"></td>
+          </tr>
+        <input id="action_lost_password"  value="execute" type="hidden">
+          </tbody>
+      </table>
+    </form>
+  
+  </div>
+</div>
+<div class="content_news_right fr">
+	<?php require ("block_login.phtml"); ?>
+  	<?php require ("block_important.phtml"); ?>
+  	<?php require ("block_connect.phtml"); ?>
+</div>

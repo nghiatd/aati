@@ -1,0 +1,259 @@
+<div class="grid_4">
+    <div class="da-panel collapsible">
+        <div class="da-panel-header">
+            <span class="da-panel-title">
+                <img src="images/icons/black/16/computer_imac.png" alt="Panel" />
+                Add About
+                <a href="<?php echo $this->url(array ( 'action'=> 'about','controller'=> 'index', 'module'=> 'admin') ); ?>" class="da-tooltip-sw da-button gray" id="da-ex-dialog-form" value="Back" original-title="Click here to back">Back</a>
+            </span>
+            
+        </div>
+        <div class="da-panel-content">
+
+            <script type="text/javascript">
+                jQuery(document).ready(function() {
+                    jQuery("form#da-ex-dialog-form-val").validate({
+                        rules:{
+                            reqName:{required:true},
+                            reqEmail:{required:true,email:true},
+                            reqAddress:{required:true},
+                            reqOrder:{required:true,digits:true},
+                            reqStatus:{required:true}},
+                        invalidHandler:function(f,d){
+                            var g=d.numberOfInvalids();
+                            if(g){var e=g==1?"You missed 1 field. It has been highlighted":"You missed "+g+" fields. They have been highlighted";
+                                jQuery("#da-validate-error").html(e).show()
+                            }else{
+                                jQuery("#da-validate-error").hide()
+                            }
+                        },
+                        success: function(label) {
+                             
+                           },
+                        submitHandler: function(form) { 
+                            var name = jQuery("#name").val();
+                            var image = url_logo;
+                            var address = jQuery("#address").val();
+                            var email = jQuery("#email").val();
+                            var introductions = CKEDITOR.instances['editor'].getData();
+                            var content = CKEDITOR.instances['content'].getData();
+                            var link = jQuery("#link").val();
+                            var type = jQuery("#type").val();
+                            var order = jQuery("#order").val();
+                            var status = jQuery("#statuss").val();
+                            var fullDate = new Date();                                          
+                            //convert month to 2 digits
+                            var twoDigitMonth = ((fullDate.getMonth().length+1) === 1)? (fullDate.getMonth()+1) : '0' + (fullDate.getMonth()+1);
+                              
+                            var dateModified = fullDate.getFullYear() + "-" + twoDigitMonth + "-" + fullDate.getDate();
+                            var datalist=new Array();
+                                datalist[0]= name;
+                                datalist[1]= link; 
+                                datalist[2]= image;
+                                datalist[3]= address;
+                                datalist[4]= email;
+                                datalist[5]= introductions;  
+                                datalist[6]= content; 
+                                datalist[7]= dateModified;  
+                                datalist[8]= type;  
+                                datalist[9]= order; 
+                                datalist[10]= status;
+                            jQuery.ajax({
+                                url:"<?php echo 'http://'.URL_CONFIG;?>/public/admin/index/saveabout",
+                                type:"POST",
+                                data:{data:datalist},
+                                success:function(result){
+                                    alert(result);
+                                    form.submit();
+                                }
+                            });
+                        }
+                    });
+                    jQuery("#da-ex-dialog-form").bind("click",function(d){
+                        jQuery("#da-ex-dialog-form-div").dialog("option",{modal:true}).dialog("open");
+                        d.preventDefault();
+                    });
+                    var baseUrl = jQuery("#baseUrl").val();
+                    CKEDITOR.replace( 'editor',{
+                        filebrowserBrowseUrl : 'http://'+baseUrl+'/public/ckeditor/ckfinder/ckfinder.html?id=demo3',
+                        filebrowserImageBrowseUrl : 'http://'+baseUrl+'/public/ckeditor/ckfinder/ckfinder.html?Type=Images&id=demo3',
+                        filebrowserFlashBrowseUrl : 'http://'+baseUrl+'/public/ckeditor/ckfinder/ckfinder.html?Type=Flash&id=demo3',
+                        filebrowserUploadUrl : 'http://'+baseUrl+'/public/ckeditor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files&currentFolder=/Public%20Folder&id=demo3',
+                        filebrowserImageUploadUrl : 'http://'+baseUrl+'/public/ckeditor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images&currentFolder=/Public%20Folder&id=demo3',
+                        filebrowserFlashUploadUrl : 'http://'+baseUrl+'/public/ckeditor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash&currentFolder=/Public%20Folder&id=demo3'
+                    });
+                    CKEDITOR.replace( 'content',{
+                        filebrowserBrowseUrl : 'http://'+baseUrl+'/public/ckeditor/ckfinder/ckfinder.html?id=demo3',
+                        filebrowserImageBrowseUrl : 'http://'+baseUrl+'/public/ckeditor/ckfinder/ckfinder.html?Type=Images&id=demo3',
+                        filebrowserFlashBrowseUrl : 'http://'+baseUrl+'/public/ckeditor/ckfinder/ckfinder.html?Type=Flash&id=demo3',
+                        filebrowserUploadUrl : 'http://'+baseUrl+'/public/ckeditor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files&currentFolder=/Public%20Folder&id=demo3',
+                        filebrowserImageUploadUrl : 'http://'+baseUrl+'/public/ckeditor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images&currentFolder=/Public%20Folder&id=demo3',
+                        filebrowserFlashUploadUrl : 'http://'+baseUrl+'/public/ckeditor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash&currentFolder=/Public%20Folder&id=demo3'
+                    });
+                    //Replace title to convert to link
+                    jQuery("#name").change(function(){
+                        var str = jQuery(this).val();
+                        var replace_str = str.replace(/ /g, "-");
+                        jQuery("#link").val(replace_str);
+                    });
+                });
+            </script>
+<div id="da-ex-dialog-form-div" class="no-padding">
+    <form id="da-ex-dialog-form-val" class="da-form">
+
+        <div id="da-validate-error" class="da-message error" style="display:none;"></div>
+
+        <div class="da-form-inline">
+
+            <div class="da-form-row">
+
+                <label>Name:</label>
+
+                <div class="da-form-item large">
+
+                    <input type="text" name="reqName" id="name" />
+
+                </div>
+
+            </div>
+            <div class="da-form-row">
+
+                <label>Link:</label>
+
+                <div class="da-form-item large">
+
+                    <input type="text" name="reqLink" id="link" />
+
+                </div>
+
+            </div>
+            <div class="da-form-row">
+                <label>Image:</label>
+                <div class="da-form-item large">
+                    <input type="file" id="file-upload" class=" da-custom-file customfile-input" style="left: -14px; top: 15px; ">
+
+                <span id="status" ></span>
+
+                <ul id="files" ></ul>
+                <script type="text/javascript" >
+                    var url_logo="";
+                    $(function(){
+                    var btnUpload=$('#file-upload');
+                    var status=$('#status');
+                    var folder="<?php echo ROOT_CONFIG.'/public/data/news/'?>";
+                    new AjaxUpload(btnUpload, {
+                        action: '<?php echo "http://".URL_CONFIG."/public/admin/index/uploadimagenews";?>',
+                        name: 'uploadfile',
+                        onSubmit: function(file, ext){
+                             if (! (ext && /^(jpg|png|jpeg|gif)$/.test(ext))){ 
+                                // extension is not allowed 
+                                status.text('Only JPG, PNG or GIF files are allowed');
+                                return false;
+                            }
+                            status.text('Uploading...');
+                        },
+                        onComplete: function(file, response){
+                            //On completion clear the status
+                            status.text('');
+                            //Add uploaded file to list
+                            if(response==="success"){
+                                var src='<?php echo "http://".URL_CONFIG."/public/data/news/";?>'+file;
+                                url_logo='<?php echo "/public/data/news/";?>'+file;
+                                var image="<img src='"+src+"'/>";
+                                var name="<br/>"+file;
+                                $('<li></li>').appendTo('#files').html(image+name).addClass('success');
+                            } else{
+                                $('<li></li>').appendTo('#files').text(file).addClass('error');
+                            }
+                        }
+                    });
+
+                    });
+                    </script>
+
+                </div>
+            </div>
+            <div class="da-form-row">
+
+                <label>Address:</label>
+
+                <div class="da-form-item large">
+
+                    <input type="text" name="reqAddress" id="address"/>
+
+                </div>
+
+            </div>
+            <div class="da-form-row">
+
+                <label>Email:</label>
+
+                <div class="da-form-item large">
+
+                    <input type="text" name="reqEmail" id="email"/>
+
+                </div>
+
+            </div>
+            <div class="da-form-row">
+                <label>Introductions:</label>
+
+                <div class="da-form-item large">
+                    <form class="da-form">
+
+                        <div id="editor"></div>
+                    </form>
+
+                </div>
+            </div>
+            <div class="da-form-row">
+                <label>Content:</label>
+
+                <div class="da-form-item large">
+                    <form class="da-form">
+
+                        <div id="content"></div>
+                    </form>
+
+                </div>
+            </div>
+            <div class="da-form-row">
+                <label>Type: </label>
+                <div class="da-form-item small">
+                    <select name="reqType" id="type">
+                        <?php
+                            if(count($this->typeabout)>0){
+                                foreach ($this->typeabout as $type) {
+                                    echo "<option value=\"".$type['id']."\">".$type['name']."</option>";
+                                }
+                            }
+                        ?>
+                    </select>
+                </div>
+            </div>
+            <div class="da-form-row">
+                <label>Order:</label>
+                <div class="da-form-item small">
+                    <input type="text" name="reqOrder" id="order" />
+                </div>
+            </div>
+            <div class="da-form-row">
+                <label>Status: </label>
+                <div class="da-form-item small">
+                    <select name="reqStatus" id="statuss">
+                        <option value="1">Enable</option>
+                        <option value="0">Disable</option>
+                    </select>
+                </div>
+            </div>
+            <div class="da-button-row">
+                <input type="reset" value="Reset" class="da-button gray left">
+                <input type="submit" value="Add" id="btn_add_about" class="da-button pink">
+            </div>
+        </div>
+
+    </form>
+</div>
+        </div>
+    </div>
+</div>

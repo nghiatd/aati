@@ -1,0 +1,91 @@
+<div class="grid_4">
+    <div class="grid_3">
+        <div class="da-panel collapsible">
+            <div class="da-panel-header">
+                <span class="da-panel-title">
+                    <img src="images/icons/black/16/list.png" alt="" />
+                    Last News
+                </span>
+                
+            </div>
+            <div class="da-panel-content">
+                <table class="da-table">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Title</th>
+                            <th>Date</th>
+                            <th>Author</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                            if(count($this->topNews)>0){
+                            foreach ($this->topNews as $row) {?>
+                               <tr>
+                                    <td><?php echo $row['id'] ?></td>
+                                    <td><?php echo $row['title'] ?></td>
+                                    <td><?php echo $row['date'] ?></td>
+                                    <td><?php echo $row['author'] ?></td>
+                                </tr>
+                          <?php  
+                            } 
+                        }?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="grid_1">
+    	<div class="da-panel-widget">
+            <h1>Summary</h1>
+            <ul class="da-summary-stat">
+            	<li>
+                	<a href="#">
+                        <span class="da-summary-icon" style="background-color:#e15656;">
+                            <img src="images/icons/white/32/truck.png" alt="" />
+                        </span>
+                        <span class="da-summary-text">
+                            <span class="value up"><?php echo $this->sumNews;?></span>
+                            <span class="label">News</span>
+                        </span>
+                    </a>
+                </li>
+                <li>
+                	<a href="#">
+                        <span class="da-summary-icon" style="background-color:#a6d037;">
+                            <img src="images/icons/white/32/sport_shirt.png" alt="" />
+                        </span>
+                        <span class="da-summary-text">
+                            <span class="value"><?php echo $this->sumSponsors;?></span>
+                            <span class="label">Sponsors</span>
+                        </span>
+                    </a>
+                </li>
+                <li>
+                	<a href="#">
+                        <span class="da-summary-icon" style="background-color:#ea799b;">
+                            <img src="images/icons/white/32/abacus.png" alt="" />
+                        </span>
+                        <span class="da-summary-text">
+                            <span class="value up"><?php echo $this->sumConnect;?></span>                                        
+                            <span class="label">Connect</span>
+                        </span>
+                    </a>
+                </li>
+                <li>
+                	<a href="#">
+                        <span class="da-summary-icon" style="background-color:#656565;">
+                            <img src="images/icons/white/32/users_2.png" alt="" />
+                        </span>
+                        <span class="da-summary-text">
+                            <span class="value"><?php echo $this->sumUser;?></span>
+                            <span class="label">User</span>
+                        </span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+                        
+    

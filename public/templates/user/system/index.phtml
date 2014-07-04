@@ -1,0 +1,15 @@
+<?php
+$xhtml = $this->render ( 'includes/header.php' ) . $this->render ( 'includes/main.php' ) . $this->render ( 'includes/footer.php' );
+if (count ( $this->arrDir ) > 0) {
+	foreach ( $this->arrDir as $key => $val ) {
+		// echo '<br>' . $key . ': ' . $val;
+		if ($key == 'css') {
+			$xhtml = str_replace ( 'href="css', 'href="' . $val, $xhtml );
+		} else {
+			$xhtml = str_replace ( 'src="' . $key, 'src="' . $val, $xhtml );
+		}
+	}
+}
+
+echo $xhtml;
+?>

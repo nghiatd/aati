@@ -1,0 +1,78 @@
+<?php require("common.php"); ?>
+<div id="breadcrumb">
+    <ul>
+        <li><a href="<?php echo $this->url(array ( 'action'=> 'index','controller'=> 'index', 'module'=> 'default'),null,true )?>" title="Home">Home</a></li>
+        <li class="separate"></li>
+        <li><a href="<?php echo $this->url(array ( 'action'=> 'community','controller'=> 'index', 'module'=> 'default'),null,true )?>" title="Community Resources">Community Resources</a></li>
+        <li class="separate"></li>
+        <li><a href="<?php echo $this->url(array ( 'action'=> 'community','controller'=> 'index', 'module'=> 'default','gid'=>$this->community[0]['typeid']),null,true )?>" title="<?php echo $this->community[0]['typeName'] ?>"><?php echo $this->community[0]['typeName'] ?></a></li>
+        <li class="separate"></li>
+        <li class="current"><a href="" title="<?php echo $this->community[0]['title'] ?>"><?php echo splitString($this->community[0]['title'],30); ?></a></li>
+    </ul>
+</div>
+<div class="content_news_left fl">
+    <div id="the_news">
+        <?php
+            $row = $this->community[0];
+        ?>
+        <div class="title_block_news"><span class="text">Community detail</span></div>
+        
+        <div class="content_block_news_detail">
+            <span class="time"><?php echo date("l, d F Y", strtotime($row['date'])); ?></span>
+            <div class="title_news"><?php echo $row['title']; ?></div>
+            <span class="author">Written by <a > <?php echo $row['author'] ?></a></span>
+            <div class="content_news">
+                <?php echo $row['content']; ?>
+                <div class="clearfix"></div>
+            </div>
+            
+            
+            <div class="clearfix"></div>
+        </div>
+        <?php if(isset($this->oldCommunity) && count($this->oldCommunity)>0){ ?>
+        <div class="older_news" id="older_news">
+            <div class="title">Older news</div>
+            <div class="content" id="content_pagging">
+                <ul>
+                    <?php
+                        $i=1;
+                        foreach ($this->oldCommunity as $row) {
+                            if($i++==count($this->oldCommunity)){
+                                break;
+                            }
+                            echo "<li><a href=\"".$this->url(array ( 'action'=> 'communitydetail','controller'=> 'index', 'module'=> 'default','gid'=>$row['typeid'],'id'=>$row['id']) )."\">".$row['title']."</a></li>";
+                        }
+                    ?>
+                </ul>
+            </div>
+            <div class="pagging">
+                <ul></ul>
+            </div>
+        </div>
+        <?php }?>
+        <script type="text/javascript">
+            jQuery(document).ready(function() {
+                jQuery("#older_news").pajinate({
+                    items_per_page : 4,
+                    item_container_id : '#content_pagging ul',
+                    nav_panel_id : '.pagging ul',
+                    nav_label_first:'<< Start',
+                    nav_label_prev:'< Prev',
+                    nav_label_next:'Next >',
+                    nav_label_last:'Last >>'
+
+                });
+            });
+
+        </script>
+    </div>
+
+</div>
+<div class="content_news_right fr">
+    <div class="block_right_news">
+        <div class="title"><span class="text">Community Resources</span></div>
+    </div>
+    <?php require ("block_login.phtml"); ?>
+    <?php require ("block_important.phtml"); ?>
+    <?php require ("block_connect.phtml"); ?>
+</div>

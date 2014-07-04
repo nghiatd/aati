@@ -1,0 +1,58 @@
+<?php require("common.php"); ?>
+<div id="breadcrumb">
+    <ul>
+        <li><a href="<?php echo $this->url(array ( 'action'=> 'index','controller'=> 'index', 'module'=> 'default'),null,true )?>" title="Home">Home</a></li>
+        <li class="separate"></li>
+        <li><a href="<?php echo $this->url(array ( 'action'=> 'publications','controller'=> 'index', 'module'=> 'default'),null,true )?>" title="Publications">Publications</a></li>
+        <li class="separate"></li>
+        <li class="current"><a href="" title="<?php echo $this->data[0]['title'];?>"><?php echo splitString($this->data[0]['title'],30); ?></a></li>
+    </ul>
+</div>
+<div class="content_news_left fl">
+    <div id="about">
+        <div class="title_block_about"><span class="text">DETAIL PUBLICATIONS
+        </span></div>
+        
+        <div class="content_block_news_detail">
+            <?php
+                if(isset($this->data) && count($this->data)>0){
+                    $result=$this->data[0];
+                ?>
+                    <div class="title_news"><?php echo $result['title']; ?></div>
+                    <table align="center" width="100%">
+                            <tbody>
+                              <tr>
+                                <td>Date:</td>
+                                <td><?php echo $result['start_date']; ?> -> <?php echo $result['end_date']; ?></td>
+                              </tr>
+                              <tr>
+                                <td>Location:</td>
+                                <td><?php echo $result['location']; ?></td>
+                              </tr>
+                              <tr>
+                                <td>Organisers:</td>
+                                <td><?php echo $result['organisers']; ?></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                    <div class="content_news">
+                        <?php echo $result['content']; ?>
+                        <div class="clearfix"></div>
+                    </div>
+
+            <?php
+                }
+            ?>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+
+</div>
+<div class="content_news_right fr">
+    <div class="block_right_about">
+        <div class="title"><span class="text">DETAIL PUBLICATIONS</span></div>
+    </div>
+    <?php require ("block_login.phtml"); ?>
+    <?php require ("block_important.phtml"); ?>
+    <?php require ("block_connect.phtml"); ?>
+</div>

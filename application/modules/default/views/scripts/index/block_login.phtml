@@ -1,0 +1,53 @@
+<div class="block_login">
+    <div class="title_login"><span>Login</span></div>
+    <div class="content_login">
+        <?php
+            if(isset($this->userinfo)){
+                $user = $this->userinfo;
+                ?>
+                <p style="padding:0px 0px 0px 8px;">Hi <a href="<?php echo $this->url(array ( 'action'=> 'editaccount','controller'=> 'index', 'module'=> 'default','id'=>$user->id),null,true); ?>"><?php echo $user->username; ?></a>, Welcome to website</p>
+
+                <a style="padding:5px 0px 5px 8px;display: block" href="<?php echo $this->url(array ( 'action'=> 'logout','controller'=> 'index', 'module'=> 'default'),null,true ); ?>">Logout</a>
+            <?php
+            }else{
+        ?>
+      <form action="#" method="post">
+        <label>Username</label>
+        <input type="text" name="username" id="username" />
+        <label>Password</label>
+        <input type="password" name="password" id="password" />
+        <input type="button" name="login" value="login" id="btn_login" />
+        <input type="hidden" name="currentUrl" id="currentUrl" value="<?php echo (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"]=="on") ? "https://" : "http://".$_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"]; ?>">
+        <ul>
+            <li><a href="<?php echo $this->url(array ( 'action'=> 'forgotpass','controller'=> 'index', 'module'=> 'default') ,null,true); ?>">Forgot your password?</a></li>
+            <li><a href="<?php echo $this->url(array ( 'action'=> 'forgotuser','controller'=> 'index', 'module'=> 'default') ,null,true); ?>">Forgot your username?</a></li>
+            <li><a href="<?php echo $this->url(array ( 'action'=> 'register','controller'=> 'index', 'module'=> 'default') ,null,true); ?>">Create an account</a></li>
+        </ul>
+      </form>
+      <?php }?>
+    </div>
+</div>
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        jQuery("#btn_login").click(function(){
+            var username = jQuery("#username").val();
+            var password = jQuery("#password").val();
+            var remember=0;
+            if ($('#remember').is(":checked"))
+            {
+                remember=1;
+            }
+            var currentUrl = jQuery("#currentUrl").val();
+            jQuery.ajax({
+                url:"<?php echo 'http://'.URL_CONFIG;?>/public/default/index/login",
+                type:"POST",
+                data:{username:username,password:password,remember:remember,currentUrl:currentUrl},
+                success:function(result){
+                    location.href=currentUrl;
+                }
+            });
+
+        });
+    });
+    
+</script>

@@ -1,0 +1,191 @@
+<div class="grid_4">
+    <h1>
+        <?php echo $this->heading;?></h1>
+    <div class="grid_2">
+        <div class="da-panel">
+            <div class="da-panel-header">
+                <span class="da-panel-title">
+                    <img src="images/icons/black/16/pencil.png" alt="" />
+                    Edit User 
+                    <?php
+                        $result=$this->data[0];
+                    ?>
+                </span>
+            </div>
+            <div class="da-panel-content">
+                <input type="hidden" value="<?php echo $result['ID_user']; ?>" id="ID_user"/>
+                <form class="da-form">
+                    
+                    <div class="da-form-row">
+                        <label>Username:</label>
+                        <div class="da-form-item large">
+                            <input type="text" disabled="disabled" id="username" value="<?php echo $result['username']; ?>" />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Full name:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="fullname" value="<?php echo $result['fullname']; ?>"/>
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Address:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="address" value="<?php echo $result['address']; ?>" />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Phone:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="phone" value="<?php echo $result['phone']; ?>" />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Email:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="email" value="<?php echo $result['email']; ?>" />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Created date:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="dateAdd" disabled="disabled" value="<?php echo $result['dateAdd']; ?>"/>
+                        </div>
+                    </div>
+                    
+                    <div class="da-button-row">
+                        <input type="reset" value="Reset" class="da-button gray left" />
+                        <input type="button" value="Submit" class="da-button green" id="btn_updateinfo_user" />
+                    </div>
+                    <script type="text/javascript" language="javascript">
+                        jQuery(document).ready(function() {
+                            jQuery("#btn_updateinfo_user").click(function(){
+                                var datalist=new Array();
+                                datalist[0]= jQuery("#username").val();
+                                datalist[1]=jQuery("#fullname").val();
+                                datalist[2]=jQuery("#address").val();
+                                datalist[3]=jQuery("#phone").val();
+                                datalist[4]=jQuery("#email").val();
+                                datalist[5]=jQuery("#nickname").val();
+                                datalist[6]=jQuery("#points").val();
+                                jQuery.ajax({
+                                    url:"<?php echo 'http://'.URL_CONFIG;?>/public/admin/index/updateinfouser",
+                                    type:"POST",
+                                    data:{data:datalist},
+                                    success:function(result){
+                                        alert(result);
+                                    }
+                                });
+
+                            });
+                        });
+                        
+                    </script>   
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="grid_2">
+        <div class="da-panel">
+            <div class="da-panel-header">
+                <span class="da-panel-title">
+                    <img src="images/icons/color/cog.png" alt="" />
+                    Edit password
+                </span>
+            </div>
+            <div class="da-panel-content">
+                <form class="da-form">
+                    <div class="da-form-row">
+                        <label>Password current:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="passcurrent" value="" placeholder="Placeholder text.." />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Password new:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="passnew" value="" placeholder="Placeholder text.." />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Confirm password new:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="repassnew" value="" placeholder="Placeholder text.." />
+                        </div>
+                    </div>
+                    
+                    <div class="da-button-row">
+                        <input type="reset" value="Reset" class="da-button gray left" />
+                        <input type="button" value="Submit" id="btn_updatepass_user" class="da-button red" />
+                    </div>
+                    <script type="text/javascript" language="javascript">
+                        jQuery(document).ready(function() {
+                            
+                            jQuery("#passcurrent").change(function(){
+                                var pass = jQuery(this).val();
+                                var id=jQuery("#ID_user").val();
+                                jQuery.ajax({
+                                        url:"<?php echo 'http://'.URL_CONFIG;?>/public/admin/index/checkpass",
+                                        type:"POST",
+                                        data:{id:id,pass:pass},
+                                        success:function(result){
+                                            if(result!=""){
+                                                alert(result);
+                                            }
+                                            
+                                        }
+                                    });
+                            });
+                            jQuery("#btn_updatepass_user").click(function(){
+                                var passcurrent=jQuery("#passcurrent").val();
+                                var passnew=jQuery("#passnew").val();
+                                var repassnew=jQuery("#repassnew").val();
+                                if(passcurrent==""){
+                                    alert("Vui lòng nhập mật khẩu hiện tại");
+                                    jQuery("#passcurrent").focus();
+                                    return;
+                                }
+                                if(passnew==""){
+                                    alert("Vui lòng nhập mật khẩu mới");
+                                    jQuery("#passnew").focus();
+                                    return;
+                                }
+                                if(repassnew==""){
+                                    alert("Vui lòng nhập lại mật khẩu mới");
+                                    jQuery("#repassnew").focus();
+                                    return;
+                                }
+                                if(passcurrent==passnew){
+                                    alert("Mật khẩu mới phải khác mật khẩu cũ");
+                                    jQuery("#passnew").focus();
+                                    return;
+                                }
+                                if(passnew!=repassnew){
+                                    alert("Mật khẩu nhập lại không trùng với mật khẩu mới");
+                                    jQuery("#repassnew").focus();
+                                    return;
+                                }
+                                var id=jQuery("#ID_user").val();
+                                var datalist=new Array();
+                                datalist[0]= id;
+                                datalist[1]=passnew;
+                                jQuery.ajax({
+                                    url:"<?php echo 'http://'.URL_CONFIG;?>/public/admin/index/updatepassuser",
+                                    type:"POST",
+                                    data:{data:datalist},
+                                    success:function(result){
+                                        alert(result);
+                                    }
+                                });
+
+                            });
+                        });
+                        
+                        
+                    </script> 
+                </form>
+            </div>
+        </div>
+    </div>
+    
+</div>

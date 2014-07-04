@@ -1,0 +1,376 @@
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        jQuery("#dialog_view_type,#dialog_update_type").dialog({
+            autoOpen:false,
+            title:"Type",
+            modal:true,
+            width:"640"
+        }).find("#da-ex-dialog-dp").datepicker({dateFormat:"yy-mm-dd"}).end().find("form").validate({
+            rules:{
+                reqName:{required:true},
+                reqLink:{required:true},
+                reqOrder:{required:true,digits:true},
+                reqStatus:{required:true}},
+            invalidHandler:function(f,d){
+                var g=d.numberOfInvalids();
+                if(g){var e=g==1?"You missed 1 field. It has been highlighted":"You missed "+g+" fields. They have been highlighted";
+                    jQuery("#da-validate-error").html(e).show()
+                }else{
+                    jQuery("#da-validate-error").hide()
+                }
+            }
+        });
+        jQuery("#da-ex-dialog-form").bind("click",function(d){
+            jQuery("#da-ex-dialog-form-div").dialog("option",{modal:true}).dialog("open");
+            d.preventDefault();
+        });
+        jQuery(".view_type").click(function(evt){
+            evt.preventDefault();
+            var id=jQuery(this).attr("id");
+            jQuery.ajax({
+                url:"<?php echo 'http://'.URL_CONFIG;?>/public/admin/index/gettypemembership",
+                type:"POST",
+                data:{data:id},
+                success:function(result){
+                    var obj = $.parseJSON(result);
+                    jQuery("#view_name").val(obj[0]['name']);
+                    jQuery("#view_link").val(obj[0]['seo']);
+                    jQuery("#view_order").val(obj[0]['order']);
+                    jQuery("#view_statuss").val(obj[0]['status']);
+                    jQuery("#dialog_view_type").dialog({
+                        title:"View Type Membership",
+                        modal:true,
+                        width:"640",
+                        beforeClose: function(event, ui) {
+                            jQuery("#view_name").val("");
+                            jQuery("#view_link").val("");
+                            jQuery("#view_order").val("");
+                            jQuery("#view_statuss").val("");
+                        },
+                        buttons: { "Ok": function() { $(this).dialog("close"); } }
+                    }).dialog("open");
+                }
+            });
+        });
+        //Update type
+        var id_type="";
+        jQuery(".edit_type").click(function(evt){
+            evt.preventDefault();
+            var id=jQuery(this).attr("id");
+            id_type=id;
+            jQuery.ajax({
+                url:"<?php echo 'http://'.URL_CONFIG;?>/public/admin/index/gettypemembership",
+                type:"POST",
+                data:{data:id},
+                success:function(result){
+                    var obj = $.parseJSON(result);
+                    jQuery("#up_name").val(obj[0]['name']);
+                    jQuery("#up_link").val(obj[0]['seo']);
+                    jQuery("#up_order").val(obj[0]['order']);
+                    jQuery("#up_statuss").val(obj[0]['status']);
+                    jQuery("#dialog_update_type").dialog({
+                        title:"Update Type Membership",
+                        modal:true,
+                        width:"640",
+                        beforeClose: function(event, ui) {
+                            jQuery("#up_name").val("");
+                            jQuery("#up_link").val("");
+                            jQuery("#up_order").val("");
+                            jQuery("#up_statuss").val("");
+                        }
+                    }).dialog("open");
+                }
+            });
+        });
+        //Xu ly update type membership
+        jQuery("#btn_update_type").click(function(){
+            var id=id_type;
+            var name=jQuery("#up_name").val();
+            var link=jQuery("#up_link").val();
+            var order=jQuery("#up_order").val();
+            var status=jQuery("#up_statuss").val();
+
+            var datalist=new Array();
+            datalist[0]=    id;
+            datalist[1]=    name;
+            datalist[2]=    link; 
+            datalist[3]=    order;
+            datalist[4]=    status;
+            jQuery.ajax({
+                url:"<?php echo 'http://'.URL_CONFIG;?>/public/admin/index/updatetypemembership",
+                type:"POST",
+                data:{data:datalist},
+                success:function(result){
+                    alert(result);
+                    location.href="<?php echo 'http://'.URL_CONFIG.'/public/admin/index/typemembership' ?>";
+                }
+            });
+        });
+        //Xu ly delete type membership
+        jQuery(".delete_type").click(function(){
+            var choose=confirm("You are want to delete?");
+            if(choose){
+                var id=jQuery(this).attr("id");
+                jQuery.ajax({
+                    url:"<?php echo 'http://'.URL_CONFIG;?>/public/admin/index/deletetypemembership",
+                    type:"POST",
+                    data:{data:id},
+                    success:function(result){
+                        alert(result);
+                        location.href="<?php echo 'http://'.URL_CONFIG.'/public/admin/index/typemembership' ?>";
+                    }
+                });
+            }            
+        });
+    });
+</script>
+<div class="grid_2">
+    <div class="da-panel collapsible">
+        <div class="da-panel-header">
+            <span class="da-panel-title">
+                <img src="images/icons/black/16/computer_imac.png" alt="Panel" />
+                Add Type Membership
+            </span>
+
+        </div>
+        <div class="da-panel-content">
+            <div id="da-ex-dialog-form-div" class="no-padding">
+                <form id="da-ex-dialog-form-val" class="da-form">
+
+                    <div id="da-validate-error" class="da-message error" style="display:none;"></div>
+
+                    <div class="da-form-inline">
+
+                        <div class="da-form-row">
+
+                            <label>Name:</label>
+
+                            <div class="da-form-item large">
+
+                                <input type="text" name="reqName" id="name" />
+
+                            </div>
+
+                        </div>
+                        <div class="da-form-row">
+
+                            <label>Link:</label>
+
+                            <div class="da-form-item large">
+
+                                <input type="text" name="reqLink" id="link" />
+
+                            </div>
+
+                        </div>
+                        <div class="da-form-row">
+                            <label>Order:</label>
+                            <div class="da-form-item small">
+                                <input type="text" name="reqOrder" id="order" />
+                            </div>
+                        </div>
+                        <div class="da-form-row">
+                            <label>Status:</label>
+                            <div class="da-form-item small">
+                                <select name="reqStatus" id="statuss">
+                                    <option value="1">Enable</option>
+                                    <option value="0">Disable</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="da-button-row">
+                            <input type="reset" value="Reset" class="da-button gray left">
+                            <input type="button" value="Add" id="btn_add_typemembership" class="da-button pink"></div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        jQuery("#btn_add_typemembership").click(function(){
+            var name= jQuery("#name").val();
+            var seo = jQuery("#link").val();
+            var order = jQuery("#order").val();
+            var status = jQuery("#statuss").val();
+            var datalist=new Array();
+                datalist[0]= name;
+                datalist[1]= seo; 
+                datalist[2]= order; 
+                datalist[3]= status;
+            jQuery.ajax({
+                url:"<?php echo 'http://'.URL_CONFIG;?>/public/admin/index/addtypemembership",
+                type:"POST",
+                data:{data:datalist},
+                success:function(result){
+                    alert(result);
+                    location.href="<?php echo 'http://'.URL_CONFIG;?>/public/admin/index/typemembership";
+                }
+            });
+        });
+    });
+    
+</script>
+
+<div class="grid_2">
+    <div class="da-panel collapsible">
+        <div class="da-panel-header">
+            <span class="da-panel-title">
+                <img src="images/icons/black/16/list.png" alt="" />
+                List type membership
+            </span>
+            
+        </div>
+        <div class="da-panel-content">
+            <table id="da-ex-datatable-numberpaging" class="da-table">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Name</th>
+                        <th>Order</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                        if(count($this->data)>0){
+                            foreach ($this->data as $result){
+                                echo "<tr>";
+                                    echo "<td>".$result['id']."</td>";
+                                    echo "<td>".$result['name']."</td>";
+                                    echo "<td>".$result['order']."</td>";
+                                    if($result['status']==1){
+                                        echo "<td> Enable</td>";
+                                    }else{
+                                        echo "<td> Disable</td>";
+                                    }
+                                    echo "<td class=\"da-icon-column\">";
+                                        echo "<a href=\"#\" id=\"".$result['id']."\" class=\"view_type\"><img src=\"images/icons/color/magnifier.png\" /></a>";
+                                        echo "<a href=\"#\" id=\"".$result['id']."\" class=\"edit_type\"><img src=\"images/icons/color/pencil.png\" /></a>";
+                                        echo "<a href=\"#\" id=\"".$result['id']."\" class=\"delete_type\"><img src=\"images/icons/color/cross.png\" /></a>";
+                                    echo "</td>";
+                                echo "</tr>";                                
+                            }
+                        }
+                     ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!--View Type-->
+<div id="dialog_view_type" class="no-padding">
+    <form id="da-ex-dialog-form-val" class="da-form">
+
+        <div id="da-validate-error" class="da-message error" style="display:none;"></div>
+
+        <div class="da-form-inline">
+
+            <div class="da-form-row">
+
+                <label>Name:</label>
+
+                <div class="da-form-item large">
+
+                    <input type="text" name="reqName" id="view_name" />
+
+                </div>
+
+            </div>
+            <div class="da-form-row">
+
+                <label>Link:</label>
+
+                <div class="da-form-item large">
+
+                    <input type="text" name="reqLink" id="view_link" />
+
+                </div>
+
+            </div>
+            <div class="da-form-row">
+
+                <label>Order:</label>
+
+                <div class="da-form-item large">
+
+                    <input type="text" name="reqOrder" id="view_order"/>
+
+                </div>
+
+            </div>
+            <div class="da-form-row">
+                <label>Status: </label>
+                <div class="da-form-item small">
+                    <select name="reqStatus" id="view_statuss">
+                        <option value="1">Enable</option>
+                        <option value="0">Disable</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<!--Update Type-->
+<div id="dialog_update_type" class="no-padding">
+    <form id="da-ex-dialog-form-val" class="da-form">
+
+        <div id="da-validate-error" class="da-message error" style="display:none;"></div>
+
+        <div class="da-form-inline">
+
+            <div class="da-form-row">
+
+                <label>Name:</label>
+
+                <div class="da-form-item large">
+
+                    <input type="text" name="reqName" id="up_name" />
+
+                </div>
+
+            </div>
+            <div class="da-form-row">
+
+                <label>Link:</label>
+
+                <div class="da-form-item large">
+
+                    <input type="text" name="reqLink" id="up_link" />
+
+                </div>
+
+            </div>
+            <div class="da-form-row">
+
+                <label>Order:</label>
+
+                <div class="da-form-item large">
+
+                    <input type="text" name="reqOrder" id="up_order"/>
+
+                </div>
+
+            </div>
+            <div class="da-form-row">
+                <label>Status: </label>
+                <div class="da-form-item small">
+                    <select name="reqStatus" id="up_statuss">
+                        <option value="1">Enable</option>
+                        <option value="0">Disable</option>
+                    </select>
+                </div>
+            </div>
+            <div class="da-button-row">
+                <input type="reset" value="Reset" id="reset_update_type" class="da-button gray left" />
+                <input type="submit" value="Update" class="da-button green" id="btn_update_type" />
+            </div>
+        </div>
+
+    </form>
+</div>

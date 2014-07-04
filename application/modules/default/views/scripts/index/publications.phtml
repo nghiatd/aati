@@ -1,0 +1,52 @@
+<div id="breadcrumb">
+    <ul>
+        <li><a href="<?php echo $this->url(array ( 'action'=> 'index','controller'=> 'index', 'module'=> 'default'),null,true )?>" title="Home">Home</a></li>
+        <li class="separate"></li>
+        <li class="current"><a href="" title="Publications">Publications</a></li>
+    </ul>
+</div>
+<div class="content_news_left fl">
+    <div id="about">
+        <div class="title_block_about"><span class="text">PUBLICATIONS
+        </span></div>
+        
+        <div class="content_block_about">
+            <?php
+                if(isset($this->data) && count($this->data)>0){
+                    $i=0;
+                    foreach ($this->data as $row) {
+                        if($i++==count($this->data)-1){?>
+                            <div class="items_about last">
+                                <a href="<?php echo $this->url(array ( 'action'=> 'detailpublications','controller'=> 'index', 'module'=> 'default','id'=>$row['id']) ); ?>" class="img fl"><img width="120" height="149" src="<?php echo 'http://'.URL_CONFIG.$row['image']; ?>" alt="<?php echo $row['name']; ?>" /></a>
+                                <span class="name"><a href="<?php echo $this->url(array ( 'action'=> 'detailpublications','controller'=> 'index', 'module'=> 'default','id'=>$row['id']) ); ?>"><?php echo $row['title']; ?></a></span>
+                                <div class="description"><?php echo $row['description']; ?></div>
+                                <div class="clearfix"></div>
+                            </div>
+
+                        <?php }else{?>
+                            <div class="items_about">
+                                <a href="<?php echo $this->url(array ( 'action'=> 'detailpublications','controller'=> 'index', 'module'=> 'default','id'=>$row['id']) ); ?>" class="img fl"><img width="120" height="149" src="<?php echo 'http://'.URL_CONFIG.$row['image']; ?>" alt="<?php echo $row['name']; ?>" /></a>
+                                <span class="name"><a href="<?php echo $this->url(array ( 'action'=> 'detailpublications','controller'=> 'index', 'module'=> 'default','id'=>$row['id']) ); ?>"><?php echo $row['title']; ?></a></span>
+                                <div class="description"><?php echo $row['description']; ?></div>
+                                <div class="clearfix"></div>
+                            </div>
+                    <?php
+                        }
+                    }
+
+                }
+            ?>
+        </div>
+    </div>
+
+</div>
+<div class="content_news_right fr">
+    <div class="block_right_about">
+        <div class="title"><span class="text">PUBLICATIONS</span></div>
+        <div class="content_about">
+        </div>
+    </div>
+    <?php require ("block_login.phtml"); ?>
+    <?php require ("block_important.phtml"); ?>
+    <?php require ("block_connect.phtml"); ?>
+</div>

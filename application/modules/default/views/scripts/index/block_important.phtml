@@ -1,0 +1,12 @@
+<div class="block_important">
+    <div class="title_important">Important Links</div>
+    <div class="content_important">
+      <ul>
+        <?php
+          foreach ($this->link as $row) {
+            echo "<li><a href=\"".$row['link']."\">".$row['title']."</a></li>";
+          }
+         ?>
+      </ul>
+    </div>
+  </div>

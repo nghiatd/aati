@@ -1,0 +1,253 @@
+<div class="grid_4">
+    <h1>
+        <?php echo $this->heading;?></h1>
+    <div class="grid_2">
+        <div class="da-panel">
+            <div class="da-panel-header">
+                <span class="da-panel-title">
+                    <img src="images/icons/black/16/pencil.png" alt="" />
+                    Edit Admin
+                    <?php
+                        $result=$this->data[0];
+                    ?>
+                </span>
+            </div>
+            <div class="da-panel-content">
+                <input type="hidden" value="<?php echo $result['ID_user']; ?>" id="ID_user"/>
+                <form class="da-form">
+                    
+                    <div class="da-form-row">
+                        <label>Username:</label>
+                        <div class="da-form-item large">
+                            <input type="text" disabled="disabled" id="username" value="<?php echo $result['username']; ?>" />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Full name:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="fullname" value="<?php echo $result['fullname']; ?>"/>
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Gender:</label>
+                        <div class="da-form-item large">
+                            <ul class="da-form-list">
+                                <li> <label><input type="radio" name="gender" id="male" checked="checked">Male</label></li>
+                                <li> <label><input type="radio" name="gender" id="female">Female</label></li>
+                            </ul>
+                            <label for="gender" class="error" generated="true" style="display:none;"></label>
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Address:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="address" value="<?php echo $result['address']; ?>" />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Birthday:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="birthday" value="<?php echo $result['birthday']; ?>" />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Phone:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="phone" value="<?php echo $result['phone']; ?>" />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Email:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="email" value="<?php echo $result['email']; ?>" />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Created date:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="dateAdd" disabled="disabled" value="<?php echo $result['date']; ?>"/>
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Status:</label>
+                        <div class="da-form-item small">
+                            <select name="reqStatus" id="statuss">
+                                <?php
+                                    if($result['status']==1){
+                                        echo "<option value=\"1\" selected='selected'>Enable</option>
+                                <option value=\"0\">Disable</option>";
+                                    }else{
+                                        echo "<option value=\"1\">Enable</option>
+                                <option value=\"0\" selected='selected'>Disable</option>";
+                                    }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Permission:</label>
+                        <div class="da-form-item small">
+                            <select name="dd1" id="idPer">
+                                <?php
+                                    foreach ($this->permission as $row) {
+                                        if($row['id']==$result['perID']){
+                                            echo "<option value=\"".$row['id']."\" selected='selected'>".$row['name']."</option>";
+                                        }else{
+                                            echo "<option value=\"".$row['id']."\">".$row['name']."</option>";
+                                        }
+                                        
+                                    }
+                                 ?>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="da-button-row">
+                        <input type="reset" value="Reset" class="da-button gray left" />
+                        <input type="button" value="Submit" class="da-button green" id="btn_updateinfo_admin" />
+                    </div>
+                    <script type="text/javascript" language="javascript">
+                        jQuery(document).ready(function() {
+                            jQuery("#btn_updateinfo_admin").click(function(){
+                                var datalist=new Array();
+                                datalist[0]= "<?php echo $result['id']; ?>";
+                                datalist[1]=jQuery("#fullname").val();
+                                var gender = 1;
+                                if(jQuery("#male").is(":checked")){
+                                    gender=1;
+                                }else{
+                                    gender=0;
+                                }
+                                datalist[2]=gender;
+                                var birthday = jQuery("#birthday").val();
+                                datalist[3]=birthday;
+                                datalist[4]=jQuery("#address").val();
+                                datalist[5]=jQuery("#email").val();
+                                datalist[6]=jQuery("#phone").val();
+                                datalist[7]=jQuery("#idPer").val();
+                                datalist[8]=jQuery("#statuss").val();
+                                jQuery.ajax({
+                                    url:"<?php echo 'http://'.URL_CONFIG;?>/public/admin/index/updateinfoadmin",
+                                    type:"POST",
+                                    data:{data:datalist},
+                                    success:function(result){
+                                        alert(result);
+                                    }
+                                });
+
+                            });
+                        });
+                        
+                    </script>   
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="grid_2">
+        <div class="da-panel">
+            <div class="da-panel-header">
+                <span class="da-panel-title">
+                    <img src="images/icons/color/cog.png" alt="" />
+                    Edit password
+                </span>
+            </div>
+            <div class="da-panel-content">
+                <form class="da-form">
+                    <div class="da-form-row">
+                        <label>Password current:</label>
+                        <div class="da-form-item large">
+                            <input type="password" id="passcurrent" value="" placeholder="Input current password..." />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Password new:</label>
+                        <div class="da-form-item large">
+                            <input type="password" id="passnew" value="" placeholder="Input new password..." />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Confirm password new:</label>
+                        <div class="da-form-item large">
+                            <input type="password" id="repassnew" value="" placeholder="Re-input current password..." />
+                        </div>
+                    </div>
+                    
+                    <div class="da-button-row">
+                        <input type="reset" value="Reset" class="da-button gray left" />
+                        <input type="button" value="Submit" id="btn_updatepass_admin" class="da-button red" disabled="disabled" />
+                    </div>
+                    <script type="text/javascript" language="javascript">
+                        jQuery(document).ready(function() {
+                            
+                            jQuery("#passcurrent").change(function(){
+                                var pass = jQuery(this).val();
+                                var id="<?php echo $result['id']; ?>";
+                                jQuery.ajax({
+                                    url:"<?php echo 'http://'.URL_CONFIG;?>/public/admin/index/checkpass",
+                                    type:"POST",
+                                    data:{id:id,pass:pass},
+                                    success:function(result){
+                                        alert(result);
+                                        if(result=="false"){
+                                            jQuery("#btn_updatepass_admin").attr('disabled','disabled');
+                                            alert(result);
+                                        }else{
+                                            jQuery("#btn_updatepass_admin").removeAttr('disabled');
+                                        }
+                                        
+                                    }
+                                });
+                            });
+                            jQuery("#btn_updatepass_admin").click(function(){
+                                var passcurrent=jQuery("#passcurrent").val();
+                                var passnew=jQuery("#passnew").val();
+                                var repassnew=jQuery("#repassnew").val();
+                                if(passcurrent==""){
+                                    alert("Please input current password.");
+                                    jQuery("#passcurrent").focus();
+                                    return;
+                                }
+                                if(passnew==""){
+                                    alert("Please input new password.");
+                                    jQuery("#passnew").focus();
+                                    return;
+                                }
+                                if(repassnew==""){
+                                    alert("Please re-input new password.");
+                                    jQuery("#repassnew").focus();
+                                    return;
+                                }
+                                if(passcurrent==passnew){
+                                    alert("New password must defferent old password.");
+                                    jQuery("#passnew").focus();
+                                    return;
+                                }
+                                if(passnew!=repassnew){
+                                    alert("Re-input password not same new password.");
+                                    jQuery("#repassnew").focus();
+                                    return;
+                                }
+                                var id="<?php echo $result['id']; ?>";
+                                var datalist=new Array();
+                                datalist[0]= id;
+                                datalist[1]=passnew;
+                                jQuery.ajax({
+                                    url:"<?php echo 'http://'.URL_CONFIG;?>/public/admin/index/updatepassadmin",
+                                    type:"POST",
+                                    data:{data:datalist},
+                                    success:function(result){
+                                        alert(result);
+                                    }
+                                });
+
+                            });
+                        });
+                        
+                        
+                    </script> 
+                </form>
+            </div>
+        </div>
+    </div>
+    
+</div>

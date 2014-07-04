@@ -1,0 +1,41 @@
+[09-Sep-2012 07:50:22] PHP Warning:  Invalid argument supplied for foreach() in /home/aati/public_html/application/modules/default/views/scripts/index/index.phtml on line 21
+[09-Sep-2012 07:50:22] PHP Warning:  Invalid argument supplied for foreach() in /home/aati/public_html/application/modules/default/views/scripts/index/index.phtml on line 42
+[09-Sep-2012 07:52:28] PHP Warning:  Invalid argument supplied for foreach() in /home/aati/public_html/application/modules/default/views/scripts/index/index.phtml on line 21
+[09-Sep-2012 07:52:28] PHP Warning:  Invalid argument supplied for foreach() in /home/aati/public_html/application/modules/default/views/scripts/index/index.phtml on line 42
+[09-Sep-2012 07:56:33] PHP Warning:  Invalid argument supplied for foreach() in /home/aati/public_html/application/modules/default/views/scripts/index/index.phtml on line 21
+[09-Sep-2012 07:56:33] PHP Warning:  Invalid argument supplied for foreach() in /home/aati/public_html/application/modules/default/views/scripts/index/index.phtml on line 42
+[09-Sep-2012 07:59:47] PHP Warning:  Invalid argument supplied for foreach() in /home/aati/public_html/application/modules/default/views/scripts/index/index.phtml on line 21
+[09-Sep-2012 07:59:47] PHP Warning:  Invalid argument supplied for foreach() in /home/aati/public_html/application/modules/default/views/scripts/index/index.phtml on line 42
+[09-Sep-2012 08:01:48] PHP Warning:  Invalid argument supplied for foreach() in /home/aati/public_html/application/modules/default/views/scripts/index/index.phtml on line 21
+[09-Sep-2012 08:01:48] PHP Warning:  Invalid argument supplied for foreach() in /home/aati/public_html/application/modules/default/views/scripts/index/index.phtml on line 42
+[09-Sep-2012 08:02:56] PHP Warning:  Invalid argument supplied for foreach() in /home/aati/public_html/application/modules/default/views/scripts/index/index.phtml on line 21
+[09-Sep-2012 08:02:56] PHP Warning:  Invalid argument supplied for foreach() in /home/aati/public_html/application/modules/default/views/scripts/index/index.phtml on line 42
+[09-Sep-2012 08:03:29] PHP Warning:  Invalid argument supplied for foreach() in /home/aati/public_html/application/modules/default/views/scripts/index/index.phtml on line 21
+[09-Sep-2012 08:03:29] PHP Warning:  Invalid argument supplied for foreach() in /home/aati/public_html/application/modules/default/views/scripts/index/index.phtml on line 42
+[09-Sep-2012 08:04:11] PHP Warning:  Invalid argument supplied for foreach() in /home/aati/public_html/application/modules/default/views/scripts/index/index.phtml on line 21
+[09-Sep-2012 08:04:11] PHP Warning:  Invalid argument supplied for foreach() in /home/aati/public_html/application/modules/default/views/scripts/index/index.phtml on line 42
+[09-Sep-2012 08:04:13] PHP Warning:  Invalid argument supplied for foreach() in /home/aati/public_html/application/modules/default/views/scripts/index/index.phtml on line 21
+[09-Sep-2012 08:04:13] PHP Warning:  Invalid argument supplied for foreach() in /home/aati/public_html/application/modules/default/views/scripts/index/index.phtml on line 42
+[09-Sep-2012 08:12:17] PHP Warning:  Invalid argument supplied for foreach() in /home/aati/public_html/application/modules/default/views/scripts/index/index.phtml on line 21
+[09-Sep-2012 08:12:17] PHP Warning:  Invalid argument supplied for foreach() in /home/aati/public_html/application/modules/default/views/scripts/index/index.phtml on line 42
+[09-Sep-2012 08:12:18] PHP Warning:  Invalid argument supplied for foreach() in /home/aati/public_html/application/modules/default/views/scripts/index/index.phtml on line 21
+[09-Sep-2012 08:12:18] PHP Warning:  Invalid argument supplied for foreach() in /home/aati/public_html/application/modules/default/views/scripts/index/index.phtml on line 42
+[09-Sep-2012 08:12:56] PHP Warning:  Invalid argument supplied for foreach() in /home/aati/public_html/application/modules/default/views/scripts/index/index.phtml on line 21
+[09-Sep-2012 08:12:56] PHP Warning:  Invalid argument supplied for foreach() in /home/aati/public_html/application/modules/default/views/scripts/index/index.phtml on line 42
+[09-Sep-2012 08:12:57] PHP Warning:  Invalid argument supplied for foreach() in /home/aati/public_html/application/modules/default/views/scripts/index/index.phtml on line 21
+[09-Sep-2012 08:12:57] PHP Warning:  Invalid argument supplied for foreach() in /home/aati/public_html/application/modules/default/views/scripts/index/index.phtml on line 42
+[09-Sep-2012 08:13:11] PHP Warning:  Invalid argument supplied for foreach() in /home/aati/public_html/application/modules/default/views/scripts/index/index.phtml on line 42
+[09-Sep-2012 08:13:12] PHP Warning:  Invalid argument supplied for foreach() in /home/aati/public_html/application/modules/default/views/scripts/index/index.phtml on line 42
+[09-Sep-2012 10:30:24] PHP Fatal error:  Uncaught exception 'Zend_Application_Bootstrap_Exception' with message 'Resource matching "view" not found' in /home/aati/public_html/library/Zend/Application/Bootstrap/BootstrapAbstract.php:691
+Stack trace:
+#0 /home/aati/public_html/library/Zend/Application/Bootstrap/BootstrapAbstract.php(626): Zend_Application_Bootstrap_BootstrapAbstract->_executeResource('view')
+#1 /home/aati/public_html/library/Zend/Application/Bootstrap/BootstrapAbstract.php(583): Zend_Application_Bootstrap_BootstrapAbstract->_bootstrap('view')
+#2 /home/aati/public_html/application/modules/default/Bootstrap.php(139): Zend_Application_Bootstrap_BootstrapAbstract->bootstrap('view')
+#3 /home/aati/public_html/library/Zend/Application/Bootstrap/BootstrapAbstract.php(666): Default_Bootstrap->_initDoctype()
+#4 /home/aati/public_html/library/Zend/Application/Bootstrap/BootstrapAbstract.php(619): Zend_Application_Bootstrap_BootstrapAbstract->_executeResource('doctype')
+#5 /home/aati/public_html/library/Zend/Application/Bootstrap/BootstrapAbstract in /home/aati/public_html/library/Zend/Application/Bootstrap/BootstrapAbstract.php on line 691
+[09-Sep-2012 11:54:23] PHP Parse error:  syntax error, unexpected T_ECHO, expecting ')' in /home/aati/public_html/application/modules/default/controllers/IndexController.php on line 141
+[09-Sep-2012 11:54:44] PHP Parse error:  syntax error, unexpected T_ECHO, expecting ')' in /home/aati/public_html/application/modules/default/controllers/IndexController.php on line 141
+[09-Sep-2012 11:55:18] PHP Parse error:  syntax error, unexpected T_ECHO, expecting ')' in /home/aati/public_html/application/modules/default/controllers/IndexController.php on line 141
+[09-Sep-2012 11:55:26] PHP Parse error:  syntax error, unexpected T_ECHO, expecting ')' in /home/aati/public_html/application/modules/default/controllers/IndexController.php on line 141
+[09-Sep-2012 12:19:36] PHP Fatal error:  Call to a member function setName() on a non-object in /home/aati/public_html/application/modules/default/controllers/IndexController.php on line 117

@@ -1,0 +1,165 @@
+<div class="grid_4">
+    <div class="da-panel collapsible">
+        <div class="da-panel-header">
+            <span class="da-panel-title">
+                <img src="images/icons/black/16/computer_imac.png" alt="Panel" />
+                Slider Management
+            </span>
+            
+        </div>
+        <div class="da-panel-content">
+                <input type="hidden" value="<?php echo $result['ID_user']; ?>" id="ID_user"/>
+                <form class="da-form">
+                    <div class="da-form-row">
+                        <div class="avatar" id="avatar" style="text-align:center"><img src="<?php echo "http://".URL_CONFIG. $result['avatar']; ?>" width="140" height="150"/></div>
+                        <label>Slider:</label>
+                        <div class="customfiles">
+                            <input type="file" id="file-upload" class=" da-custom-file customfile-input" style="left: -14px; top: 15px; ">
+
+                            <span id="status" ></span>
+        
+                            <ul id="files" ></ul>
+                            <script type="text/javascript" >
+                                var url_avatar="";
+                                $(function(){
+                                var btnUpload=$('#file-upload');
+                                var status=$('#status');
+                                new AjaxUpload(btnUpload, {
+                                    action: '<?php echo "http://".URL_CONFIG."/public/admin/index/uploadfile";?>',
+                                    name: 'uploadfile',
+                                    onSubmit: function(file, ext){
+                                         if (! (ext && /^(jpg|png|jpeg|gif)$/.test(ext))){ 
+                                            // extension is not allowed 
+                                            status.text('Only JPG, PNG or GIF files are allowed');
+                                            return false;
+                                        }
+                                        status.text('Uploading...');
+                                    },
+                                    onComplete: function(file, response){
+                                        //On completion clear the status
+                                        status.text('');
+                                        //Add uploaded file to list
+                                        if(response==="success"){
+                                            var src='<?php echo "http://".URL_CONFIG."/public/avatars/";?>'+file;
+                                            url_avatar='<?php echo "/public/avatars/";?>'+file;
+                                            var image="<img src='"+src+"'/>";
+                                            var name="<br/>"+file;
+                                            $('<li></li>').appendTo('#files').html(image+name).addClass('success');
+                                        } else{
+                                            $('<li></li>').appendTo('#files').text(file).addClass('error');
+                                        }
+                                    }
+                                });
+
+                                });
+                                </script>
+                                <script type="text/javascript">
+                                jQuery(document).ready(function() {
+                                    var url_base='<?php echo "http://".URL_CONFIG;?>';
+                                    var root_base='<?php echo ROOT_CONFIG;?>';
+                                    //Reset avatar
+                                    jQuery("#reset_avatar").click(function(){
+                                        var src=jQuery("#files li img").attr("src");
+                                        if(typeof src === "undefined"){
+
+                                        }else{
+                                            jQuery.ajax({
+                                                url:"<?php echo 'http://'.URL_CONFIG;?>/public/admin/index/deleteavatar",
+                                                type:"POST",
+                                                data:{root_base:root_base,avatar:url_avatar},
+                                                success:function(string){
+                                                    alert(string);
+                                                    jQuery("#files").remove();
+                                                }
+                                            });
+                                        }
+                                    });
+
+
+                                    //Update avatar
+                                    jQuery("#btn_update_avatar").click(function(){
+                                        if(url_avatar!=""){
+                                            var id=jQuery("#ID_user").val();
+                                            jQuery.ajax({
+                                                url:"<?php echo 'http://'.URL_CONFIG;?>/public/admin/index/updateavatar",
+                                                type:"POST",
+                                                data:{id:id,avatar:url_avatar},
+                                                success:function(string){
+                                                    var data=jQuery.parseJSON(string);
+                                                    if(data.check=="true" && data.url!=""){
+                                                        alert("Cập nhật Avatar thành công");
+                                                        jQuery("#files").remove();
+                                                        jQuery('#avatar img').attr('src',url_base+data.url);
+                                                    }else{
+                                                        alert("Cập nhật Avatar thành công");
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    });
+                                });
+                                
+                                </script>
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Name:</label>
+                        <div class="da-form-item large">
+                            <input type="text" disabled="disabled" id="username" value="" />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Url:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="fullname" value=""/>
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Status:</label>
+                        <div class="da-form-item small">
+                            <span class="formNote">Select to Hide/Show</span>
+                            <select>
+                                <option>Enable</option>
+                                <option>Disable</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Order:</label>
+                        <div class="da-form-item small">
+                            <input type="text" id="phone" value="<?php echo $result['phone']; ?>" />
+                        </div>
+                    </div>
+                    
+                    <div class="da-button-row">
+                        <input type="reset" value="Reset" class="da-button gray left" />
+                        <input type="button" value="Submit" class="da-button green" id="btn_updateinfo_user" />
+                    </div>
+                    <script type="text/javascript" language="javascript">
+                        jQuery(document).ready(function() {
+                            jQuery("#btn_updateinfo_user").click(function(){
+                                var datalist=new Array();
+                                datalist[0]= jQuery("#username").val();
+                                datalist[1]=jQuery("#fullname").val();
+                                datalist[2]=jQuery("#address").val();
+                                datalist[3]=jQuery("#phone").val();
+                                datalist[4]=jQuery("#email").val();
+                                datalist[5]=jQuery("#nickname").val();
+                                datalist[6]=jQuery("#points").val();
+                                jQuery.ajax({
+                                    url:"<?php echo 'http://'.URL_CONFIG;?>/public/admin/index/updateinfouser",
+                                    type:"POST",
+                                    data:{data:datalist},
+                                    success:function(result){
+                                        alert(result);
+                                    }
+                                });
+
+                            });
+                        });
+                        
+                    </script>   
+                </form>
+            </div>
+    </div>
+</div>

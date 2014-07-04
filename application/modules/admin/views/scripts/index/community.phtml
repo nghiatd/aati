@@ -1,0 +1,73 @@
+<div class="grid_4">
+    <div class="da-panel collapsible">
+        <div class="da-panel-header">
+            <span class="da-panel-title">
+                <img src="images/icons/black/16/computer_imac.png" alt="Panel" />
+                Community Management
+                <a href="<?php echo $this->url(array ( 'action'=> 'addcommunity','controller'=> 'index', 'module'=> 'admin') ); ?>" class="da-tooltip-sw da-button gray" id="da-ex-dialog-form" value="Add new" original-title="Click here to add new">Add new</a>
+            </span>
+            
+        </div>
+        <div class="da-panel-content">
+            <table id="da-ex-datatable-numberpaging" class="da-table">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                        if(count($this->data)>0){
+                            foreach ($this->data as $result){
+                                echo "<tr>";
+                                    echo "<td>".$result['id']."</td>";
+                                    echo "<td>".$result['title']."</td>";
+                                    echo "<td>".$result['author']."</td>";
+                                    if($result['status']==1){
+                                        echo "<td>Enable</td>";    
+                                    }else{
+                                        echo "<td>Disable</td>";    
+                                    }
+                                    echo "<td class=\"da-icon-column\">";
+                                        echo "<a href=\"".$this->url(array ( 'action'=> 'viewcommunity','controller'=> 'index', 'module'=> 'admin','id'=>$result['id']))."\"><img src=\"images/icons/color/magnifier.png\" /></a>";
+                                        echo "<a href=\"".$this->url(array ( 'action'=> 'editcommunity','controller'=> 'index', 'module'=> 'admin','id'=>$result['id']))."\"><img src=\"images/icons/color/pencil.png\" /></a>";
+                                        echo "<a href=\"#\" class=\"delete_community\" id=\"".$result['id']."\"><img src=\"images/icons/color/cross.png\" /></a>";
+                                    echo "</td>";
+                                echo "</tr>";                                
+                            }
+                        }
+                     ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        jQuery(".delete_community").click(function(){
+            var choose = confirm("You are want to delete?");
+            if(choose){
+                var id = jQuery(this).attr("id");
+                jQuery.ajax({
+                    url:"<?php echo 'http://'.URL_CONFIG;?>/public/admin/index/deletecommunity",
+                    type:"POST",
+                    data:{data:id},
+                    success:function(result){
+                        if(result=="true"){
+                            alert("Delete community successfull");
+                            location.href="<?php echo 'http://'.URL_CONFIG;?>/public/admin/index/community";
+                        }else{
+                            alert(result);
+                            return;
+                        }
+                    }
+                });
+            }
+        });
+    });
+    
+</script>

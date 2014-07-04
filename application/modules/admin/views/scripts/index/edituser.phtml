@@ -1,0 +1,288 @@
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        var baseUrl = jQuery("#baseUrl").val();
+        CKEDITOR.replace( 'description',{
+            filebrowserBrowseUrl : 'http://'+baseUrl+'/public/ckeditor/ckfinder/ckfinder.html?id=demo3',
+            filebrowserImageBrowseUrl : 'http://'+baseUrl+'/public/ckeditor/ckfinder/ckfinder.html?Type=Images&id=demo3',
+            filebrowserFlashBrowseUrl : 'http://'+baseUrl+'/public/ckeditor/ckfinder/ckfinder.html?Type=Flash&id=demo3',
+            filebrowserUploadUrl : 'http://'+baseUrl+'/public/ckeditor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files&currentFolder=/Public%20Folder&id=demo3',
+            filebrowserImageUploadUrl : 'http://'+baseUrl+'/public/ckeditor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images&currentFolder=/Public%20Folder&id=demo3',
+            filebrowserFlashUploadUrl : 'http://'+baseUrl+'/public/ckeditor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash&currentFolder=/Public%20Folder&id=demo3'
+        });
+    });
+    
+</script>
+<div class="grid_4">
+    <h1>
+        <?php echo $this->heading;?></h1>
+    <div class="grid_3">
+        <div class="da-panel">
+            <div class="da-panel-header">
+                <span class="da-panel-title">
+                    <img src="images/icons/black/16/pencil.png" alt="" />
+                    Edit User
+                    <a href="<?php echo $this->url(array ( 'action'=> 'user','controller'=> 'index', 'module'=> 'admin') ); ?>" class="da-tooltip-sw da-button gray" id="da-ex-dialog-form" value="Back" original-title="Click here to back">Back</a>
+                    
+                </span>
+            </div>
+            <?php
+                $result=$this->data[0];
+            ?>
+            <div class="da-panel-content">
+                <form class="da-form">
+                    
+                    <div class="da-form-row">
+                        <label>Company:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="company" value="<?php echo $result['company']; ?>" />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Logo:</label>
+                        <div class="da-form-item large">
+                            <img width="300" height="230px" style="margin: 10px 0px;" src="<?php echo 'http://'.URL_CONFIG.$result['logo']; ?>" alt="logo">
+                            <input type="file" id="file-upload" class=" da-custom-file customfile-input" style="left: -14px; top: 15px; ">
+
+                        <span id="status" ></span>
+
+                        <ul id="files" ></ul>
+                        <script type="text/javascript" >
+                            var url_logo="<?php echo $result['logo']; ?>";
+                            $(function(){
+                            var btnUpload=$('#file-upload');
+                            var status=$('#status');
+                            var folder="<?php echo ROOT_CONFIG.'/public/data/user/'?>";
+                            new AjaxUpload(btnUpload, {
+                                action: '<?php echo "http://".URL_CONFIG."/public/admin/index/uploadimageuser";?>',
+                                name: 'uploadfile',
+                                onSubmit: function(file, ext){
+                                     if (! (ext && /^(jpg|png|jpeg|gif)$/.test(ext))){ 
+                                        // extension is not allowed 
+                                        status.text('Only JPG, PNG or GIF files are allowed');
+                                        return false;
+                                    }
+                                    status.text('Uploading...');
+                                },
+                                onComplete: function(file, response){
+                                    //On completion clear the status
+                                    status.text('');
+                                    //Add uploaded file to list
+                                    if(response==="success"){
+                                        var src='<?php echo "http://".URL_CONFIG."/public/data/user/";?>'+file;
+                                        url_logo='<?php echo "/public/data/user/";?>'+file;
+                                        var image="<img src='"+src+"'/>";
+                                        var name="<br/>"+file;
+                                        $('<li></li>').appendTo('#files').html(image+name).addClass('success');
+                                    } else{
+                                        $('<li></li>').appendTo('#files').text(file).addClass('error');
+                                    }
+                                }
+                            });
+
+                            });
+                            </script>
+
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Address:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="address" value="<?php echo $result['address']; ?>" />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Description:</label>
+                        <div class="da-form-item large">
+                            <div type="text" id="description"><?php echo $result['description']; ?></div>
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Email:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="email" value="<?php echo $result['email']; ?>" />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Phone:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="phone" value="<?php echo $result['phone']; ?>" />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Fax:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="fax" value="<?php echo $result['fax']; ?>" />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Website:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="website" value="<?php echo $result['website']; ?>" />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Status:</label>
+                        <div class="da-form-item small">
+                            <select name="reqStatus" id="statuss">
+                                <?php
+                                    if($result['status']==1){
+                                        echo "<option value=\"1\" selected='selected'>Enable</option>
+                                <option value=\"0\">Disable</option>";
+                                    }else{
+                                        echo "<option value=\"1\">Enable</option>
+                                <option value=\"0\" selected='selected'>Disable</option>";
+                                    }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="da-button-row">
+                        <input type="reset" value="Reset" class="da-button gray left" />
+                        <input type="button" value="Submit" class="da-button green" id="btn_updateinfo_user" />
+                    </div>
+                    <script type="text/javascript" language="javascript">
+                        jQuery(document).ready(function() {
+                            jQuery("#btn_updateinfo_user").click(function(){
+                                var datalist=new Array();
+                                datalist[0]= "<?php echo $result['id']; ?>";
+                                datalist[1]=jQuery("#company").val();
+                                datalist[2]=url_logo;
+                                datalist[3]=jQuery("#address").val();
+                                datalist[4]=CKEDITOR.instances['description'].getData();
+                                datalist[5]=jQuery("#email").val();
+                                datalist[6]=jQuery("#phone").val();
+                                datalist[7]=jQuery("#fax").val();
+                                datalist[8]=jQuery("#website").val();
+                                datalist[9]=jQuery("#statuss").val();
+                                jQuery.ajax({
+                                    url:"<?php echo 'http://'.URL_CONFIG;?>/public/admin/index/updateinfouser",
+                                    type:"POST",
+                                    data:{data:datalist},
+                                    success:function(result){
+                                        alert(result);
+                                    }
+                                });
+
+                            });
+                        });
+                        
+                    </script>   
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="grid_3">
+        <div class="da-panel">
+            <div class="da-panel-header">
+                <span class="da-panel-title">
+                    <img src="images/icons/color/cog.png" alt="" />
+                    Edit password
+                </span>
+            </div>
+            <div class="da-panel-content">
+                <form class="da-form">
+                    <div class="da-form-row">
+                        <label>Username:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="username" disabled="disabled" value="<?php echo $result['username']; ?>" />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Password current:</label>
+                        <div class="da-form-item large">
+                            <input type="password" id="passcurrent" value="" placeholder="Input current password..." />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Password new:</label>
+                        <div class="da-form-item large">
+                            <input type="password" id="passnew" value="" placeholder="Input new password..." />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Confirm password new:</label>
+                        <div class="da-form-item large">
+                            <input type="password" id="repassnew" value="" placeholder="Re-input current password..." />
+                        </div>
+                    </div>
+                    
+                    <div class="da-button-row">
+                        <input type="reset" value="Reset" class="da-button gray left" />
+                        <input type="button" value="Submit" id="btn_updatepass_user" class="da-button red" disabled="disabled" />
+                    </div>
+                    <script type="text/javascript" language="javascript">
+                        jQuery(document).ready(function() {
+                            
+                            jQuery("#passcurrent").change(function(){
+                                var pass = jQuery(this).val();
+                                var id="<?php echo $result['id']; ?>";
+                                jQuery.ajax({
+                                    url:"<?php echo 'http://'.URL_CONFIG;?>/public/admin/index/checkpassuser",
+                                    type:"POST",
+                                    data:{id:id,pass:pass},
+                                    success:function(result){
+                                        if(result=="false"){
+                                            alert("Password current not correct.");
+                                            jQuery("#passcurrent").focus();
+                                            jQuery("#btn_updatepass_user").attr('disabled','disabled');
+                                        }else{
+                                            jQuery("#btn_updatepass_user").removeAttr('disabled');
+                                        }
+                                        
+                                    }
+                                });
+                            });
+                            jQuery("#btn_updatepass_user").click(function(){
+                                var passcurrent=jQuery("#passcurrent").val();
+                                var passnew=jQuery("#passnew").val();
+                                var repassnew=jQuery("#repassnew").val();
+                                if(passcurrent==""){
+                                    alert("Please input current password.");
+                                    jQuery("#passcurrent").focus();
+                                    return;
+                                }
+                                if(passnew==""){
+                                    alert("Please input new password.");
+                                    jQuery("#passnew").focus();
+                                    return;
+                                }
+                                if(repassnew==""){
+                                    alert("Please re-input new password.");
+                                    jQuery("#repassnew").focus();
+                                    return;
+                                }
+                                if(passcurrent==passnew){
+                                    alert("New password must defferent old password.");
+                                    jQuery("#passnew").focus();
+                                    return;
+                                }
+                                if(passnew!=repassnew){
+                                    alert("Re-input password not same new password.");
+                                    jQuery("#repassnew").focus();
+                                    return;
+                                }
+                                var id="<?php echo $result['id']; ?>";
+                                var datalist=new Array();
+                                datalist[0]= id;
+                                datalist[1]=passnew;
+                                jQuery.ajax({
+                                    url:"<?php echo 'http://'.URL_CONFIG;?>/public/admin/index/updatepassuser",
+                                    type:"POST",
+                                    data:{data:datalist},
+                                    success:function(result){
+                                        alert(result);
+                                    }
+                                });
+
+                            });
+                        });
+                        
+                        
+                    </script> 
+                </form>
+            </div>
+        </div>
+    </div>
+    
+</div>

@@ -1,0 +1,525 @@
+<script type="text/javascript">
+    var fullDate = new Date();                                          
+    //convert month to 2 digits
+    var twoDigitMonth = ((fullDate.getMonth().length+1) === 1)? (fullDate.getMonth()+1) : '0' + (fullDate.getMonth()+1);
+      
+    var dateModified = fullDate.getFullYear() + "-" + twoDigitMonth + "-" + fullDate.getDate();
+    var url_image_default="";
+    var id_sponsors="";
+</script>
+<div class="grid_4">
+    <div class="da-panel collapsible">
+        <div class="da-panel-header">
+            <span class="da-panel-title">
+                <img src="images/icons/black/16/computer_imac.png" alt="Panel" />
+                Sponsor Management
+                <input type="button" class="da-tooltip-sw da-button gray" id="da-ex-dialog-form" value="Add new" original-title="Click here to add new Sponsor">
+            </span>
+            
+        </div>
+        <div class="da-panel-content">
+            <table id="da-ex-datatable-numberpaging" class="da-table">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Title</th>
+                        <th>Order</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                        if(count($this->data)>0){
+                            foreach ($this->data as $result){
+                                echo "<tr>";
+                                    echo "<td>".$result['id']."</td>";
+                                    echo "<td>".$result['name']."</td>";
+                                    echo "<td>".$result['order']."</td>";
+                                    if($result['status']==1){
+                                        echo "<td> Enable</td>";
+                                    }else{
+                                        echo "<td> Disable</td>";
+                                    }
+
+                                    echo "<td class=\"da-icon-column\">";
+                                        echo "<a href=\"#\" id=\"".$result['id']."\" class=\"viewsponsors\"><img src=\"images/icons/color/magnifier.png\" /></a>";
+                                        echo "<a href=\"#\" id=\"".$result['id']."\" class=\"updatesponsors\"><img src=\"images/icons/color/pencil.png\" /></a>";
+                                        echo "<a href=\"#\" id=\"".$result['id']."\" class=\"deletesponsors\"><img src=\"images/icons/color/cross.png\" /></a>";
+                                    echo "</td>";
+                                echo "</tr>";                                
+                            }
+                        }
+                     ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        
+        jQuery("#da-ex-dialog-form-div,#view_sponsors,#update_sponsors").dialog({
+            autoOpen:false,
+            title:"Add Sponsor",
+            modal:true,
+            width:"640"
+        }).find("#da-ex-dialog-dp").datepicker({dateFormat:"yy-mm-dd"}).end().find("form").validate({
+            rules:{
+                reqName:{required:true},
+                reqImage:{required:true,accept:["jpeg","jpg","png","gif"]},
+                reqLink:{required:true},
+                reqOrder:{required:true,digits:true},
+                reqStatus:{required:true}},
+            invalidHandler:function(f,d){
+                var g=d.numberOfInvalids();
+                if(g){var e=g==1?"You missed 1 field. It has been highlighted":"You missed "+g+" fields. They have been highlighted";
+                    jQuery("#da-validate-error").html(e).show()
+                }else{
+                    jQuery("#da-validate-error").hide()
+                }
+            }
+        });
+        jQuery("#da-ex-dialog-form").bind("click",function(d){
+            jQuery("#da-ex-dialog-form-div").dialog("option",{modal:true}).dialog("open");
+            d.preventDefault();
+        });
+        //Click vao nut view
+        jQuery(".viewsponsors").click(function(evt){
+            evt.preventDefault();
+            var id=jQuery(this).attr("id");
+            jQuery.ajax({
+                url:"<?php echo 'http://'.URL_CONFIG;?>/public/admin/index/getsponsors",
+                type:"POST",
+                data:{data:id},
+                success:function(result){
+                    var obj = $.parseJSON(result);
+                    jQuery("#view_name").val(obj[0]['name']);
+                    jQuery("#view_image").attr('src',"<?php echo 'http://'.URL_CONFIG;?>"+obj[0]['image']);
+                    jQuery("#view_link").val(obj[0]['link']);
+                    jQuery("#view_order").val(obj[0]['order']);
+                    jQuery("#view_statuss").val(obj[0]['status']);
+                    jQuery("#view_sponsors").dialog({
+                        title:"View Sponsor",
+                        modal:true,
+                        width:"640",
+                        beforeClose: function(event, ui) {
+                            jQuery("#view_name").val("");
+                            jQuery("#view_image").attr('src',"");
+                            jQuery("#view_link").val("");
+                            jQuery("#view_order").val("");
+                            jQuery("#view_statuss").val("");
+                        },
+                        buttons: { "Ok": function() { $(this).dialog("close"); } }
+                    }).dialog("open");
+                }
+            });
+        });
+        //Click vao nut edit
+        jQuery(".updatesponsors").click(function(evt){
+            evt.preventDefault();
+            var id=jQuery(this).attr('id');
+            id_sponsors=id;
+            jQuery.ajax({
+                url:"<?php echo 'http://'.URL_CONFIG;?>/public/admin/index/getsponsors",
+                type:"POST",
+                data:{data:id},
+                success:function(result){
+                    var obj = $.parseJSON(result);
+                    jQuery("#up_name").val(obj[0]['name']);
+                    jQuery("#up_image").attr('src',"<?php echo 'http://'.URL_CONFIG;?>"+obj[0]['image']);
+                    jQuery("#up_link").val(obj[0]['link']);
+                    jQuery("#up_order").val(obj[0]['order']);
+                    jQuery("#up_statuss").val(obj[0]['status']);
+                    url_image_default=obj[0]['image'];
+                    jQuery("#update_sponsors").dialog({
+                        title:"Edit Sponsor",
+                        modal:true,
+                        width:"640"
+                    }).dialog("open");
+                }
+            });
+            
+        });
+        //Click vao nut delete
+
+        jQuery(".deletesponsors").click(function(evt){
+            evt.preventDefault();
+            var choose = confirm("You want to delete?");
+            if(choose){
+                var id=jQuery(this).attr("id");
+                jQuery.ajax({
+                    url:"<?php echo 'http://'.URL_CONFIG;?>/public/admin/index/deletesponsors",
+                    type:"POST",
+                    data:{data:id},
+                    success:function(result){
+                        if(result=="true"){
+                            alert("Delete sponsors successfull");
+                            location.href="<?php echo 'http://'.URL_CONFIG;?>/public/admin/index/sponsors";
+                        }else{
+                            alert(result);
+                            return;
+                        }
+                    }
+                });
+            }
+        });
+        
+    });
+    
+    
+</script>
+<!--View sponsors-->
+<div id="view_sponsors" class="no-padding">
+    <form id="da-ex-dialog-form-val" class="da-form">
+
+        <div id="da-validate-error" class="da-message error" style="display:none;"></div>
+
+        <div class="da-form-inline">
+
+            <div class="da-form-row">
+
+                <label>Name:</label>
+
+                <div class="da-form-item large">
+
+                    <input type="text" name="reqName" id="view_name"/>
+
+                </div>
+
+            </div>
+            <div class="da-form-row">
+                <label>Image:</label>
+                <div class="customfiles da-form-item large">
+                    <img src="" id="view_image" style="width:480px;height:200px;">
+                </div>
+
+            </div>
+            <div class="da-form-row">
+
+                <label>Link:</label>
+
+                <div class="da-form-item large">
+
+                    <input type="text" name="reqLink" id="view_link" />
+
+                </div>
+
+            </div>
+            <div class="da-form-row">
+
+                <label>Order:</label>
+
+                <div class="da-form-item small">
+
+                    <input type="text" name="reqOrder" id="view_order" />
+
+                </div>
+
+            </div>
+            <div class="da-form-row">
+                <label>Status: </label>
+                <div class="da-form-item small">
+                    <select name="reqStatus" id="view_statuss">
+                        <option value="1">Enable</option>
+                        <option value="0" selected="selected">Disable</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+
+</div>
+
+<!-- Update sponsors -->
+<div id="update_sponsors" class="no-padding">
+    <form id="da-ex-dialog-form-val" class="da-form">
+
+        <div id="da-validate-error" class="da-message error" style="display:none;"></div>
+
+        <div class="da-form-inline">
+
+            <div class="da-form-row">
+
+                <label>Name:</label>
+
+                <div class="da-form-item large">
+
+                    <input type="text" name="reqName" id="up_name"/>
+
+                </div>
+
+            </div>
+            <div class="da-form-row">
+                <label>Image:</label>
+                <div class="customfiles da-form-item large">
+                    <img src="" style="width: 480px;height:200px;" id="up_image">
+                    <input type="file" id="file-upload_up" class=" da-custom-file customfile-input" style="left: -14px; top: 15px; ">
+
+                    <span id="status" ></span>
+
+                    <ul id="files_up" class="file" ></ul>
+                    <script type="text/javascript" >
+                        var url_up_logo="";
+                        $(function(){
+                        var btnUpload=$('#file-upload_up');
+                        var status=$('#status');
+                        var folder="<?php echo ROOT_CONFIG.'/public/data/sponsors/'?>";
+                        new AjaxUpload(btnUpload, {
+                            action: '<?php echo "http://".URL_CONFIG."/public/admin/index/uploadlogosponsors";?>',
+                            name: 'uploadfile',
+                            onSubmit: function(file, ext){
+                                 if (! (ext && /^(jpg|png|jpeg|gif)$/.test(ext))){ 
+                                    // extension is not allowed 
+                                    status.text('Only JPG, PNG or GIF files are allowed');
+                                    return false;
+                                }
+                                status.text('Uploading...');
+                            },
+                            onComplete: function(file, response){
+                                //On completion clear the status
+                                status.text('');
+                                //Add uploaded file to list
+                                if(response==="success"){
+                                    var src='<?php echo "http://".URL_CONFIG."/public/data/sponsors/";?>'+file;
+                                    url_up_logo='<?php echo "/public/data/sponsors/";?>'+file;
+                                    var image="<img src='"+src+"'/>";
+                                    var name="<br/>"+file;
+                                    $('<li></li>').appendTo('#files_up').html(image+name).addClass('success');
+                                } else{
+                                    $('<li></li>').appendTo('#files_up').text(file).addClass('error');
+                                }
+                            }
+                        });
+
+                        });
+                        </script>
+                </div>
+
+            </div>
+            <div class="da-form-row">
+
+                <label>Link:</label>
+
+                <div class="da-form-item large">
+
+                    <input type="text" name="reqLink" id="up_link" />
+
+                </div>
+
+            </div>
+            <div class="da-form-row">
+
+                <label>Order:</label>
+
+                <div class="da-form-item small">
+
+                    <input type="text" name="reqOrder" id="up_order" />
+
+                </div>
+
+            </div>
+            <div class="da-form-row">
+                <label>Status: </label>
+                <div class="da-form-item small">
+                    <select name="reqStatus" id="up_statuss">
+                        <option value="1">Enable</option>
+                        <option value="0" selected="selected">Disable</option>
+                    </select>
+                </div>
+            </div>
+            <div class="da-button-row">
+                <input type="submit" value="Update" class="da-button pink" id="btn_update_sponsors">
+            </div>
+        </div>
+
+    </form>
+</div>
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        jQuery("#btn_update_sponsors").click(function(){
+            var name=jQuery("#up_name").val();
+            var image = "";
+            if(url_up_logo!=""){
+                image=url_up_logo;
+            }else{
+                image=url_image_default;
+            }
+            var link = jQuery("#up_link").val();
+            var order = jQuery("#up_order").val();
+            var status = jQuery("#up_statuss").val();
+
+            var datalist=new Array();
+            datalist[0]=    id_sponsors;
+            datalist[1]=    name;
+            datalist[2]=    image; 
+            datalist[3]=    link;
+            datalist[4]=    dateModified;
+            datalist[5]=    order;
+            datalist[6]=    status;
+            jQuery.ajax({
+                url:"<?php echo 'http://'.URL_CONFIG;?>/public/admin/index/updatesponsors",
+                type:"POST",
+                data:{data:datalist},
+                success:function(result){
+                    if(result=="true"){
+                        alert("Update sponsors successfull");
+                        jQuery("#update_sponsors").dialog("close");
+                    }else{
+                        alert(result);
+                        return;
+                    }
+                }
+            });
+        });
+    });
+    
+</script>
+<!--Add sponsors -->
+<div id="da-ex-dialog-form-div" class="no-padding">
+    <form id="da-ex-dialog-form-val" class="da-form">
+
+        <div id="da-validate-error" class="da-message error" style="display:none;"></div>
+
+        <div class="da-form-inline">
+
+            <div class="da-form-row">
+
+                <label>Name:</label>
+
+                <div class="da-form-item large">
+
+                    <input type="text" name="reqName" id="name"/>
+
+                </div>
+
+            </div>
+            <div class="da-form-row">
+                <label>Image:</label>
+                <div class="customfiles da-form-item large">
+                    <input type="file" id="file-upload" class=" da-custom-file customfile-input" style="left: -14px; top: 15px; ">
+
+                    <span id="status" ></span>
+
+                    <ul id="files" ></ul>
+                    <script type="text/javascript" >
+                        var url_logo="";
+                        $(function(){
+                        var btnUpload=$('#file-upload');
+                        var status=$('#status');
+                        var folder="<?php echo ROOT_CONFIG.'/public/data/sponsors/'?>";
+                        new AjaxUpload(btnUpload, {
+                            action: '<?php echo "http://".URL_CONFIG."/public/admin/index/uploadlogosponsors";?>',
+                            name: 'uploadfile',
+                            onSubmit: function(file, ext){
+                                 if (! (ext && /^(jpg|png|jpeg|gif)$/.test(ext))){ 
+                                    // extension is not allowed 
+                                    status.text('Only JPG, PNG or GIF files are allowed');
+                                    return false;
+                                }
+                                status.text('Uploading...');
+                            },
+                            onComplete: function(file, response){
+                                //On completion clear the status
+                                status.text('');
+                                //Add uploaded file to list
+                                if(response==="success"){
+                                    var src='<?php echo "http://".URL_CONFIG."/public/data/sponsors/";?>'+file;
+                                    url_logo='<?php echo "/public/data/sponsors/";?>'+file;
+                                    var image="<img src='"+src+"'/>";
+                                    var name="<br/>"+file;
+                                    $('<li></li>').appendTo('#files').html(image+name).addClass('success');
+                                } else{
+                                    $('<li></li>').appendTo('#files').text(file).addClass('error');
+                                }
+                            }
+                        });
+
+                        });
+                        </script>
+                </div>
+
+            </div>
+            <div class="da-form-row">
+
+                <label>Link:</label>
+
+                <div class="da-form-item large">
+
+                    <input type="text" name="reqLink" id="link" />
+
+                </div>
+
+            </div>
+            <div class="da-form-row">
+
+                <label>Order:</label>
+
+                <div class="da-form-item small">
+
+                    <input type="text" name="reqOrder" id="order" />
+
+                </div>
+
+            </div>
+            <div class="da-form-row">
+                <label>Status: </label>
+                <div class="da-form-item small">
+                    <select name="reqStatus" id="statuss">
+                        <option value="1">Enable</option>
+                        <option value="0" selected="selected">Disable</option>
+                    </select>
+                </div>
+            </div>
+            <div class="da-button-row">
+                <input type="reset" value="Reset" class="da-button gray left" id="btn_reset">
+                <input type="submit" value="Add" class="da-button pink" id="btn_add">
+            </div>
+        </div>
+
+    </form>
+
+
+</div>
+
+<script type="text/javascript" language="javascript">
+    jQuery(document).ready(function() {
+        
+        jQuery("#btn_add").click(function(){
+            
+            var datalist=new Array();
+            datalist[0]= jQuery("#name").val();
+            datalist[1]=url_logo; 
+            datalist[2]=  jQuery("#link").val();
+            datalist[3]= dateModified;
+            datalist[4]=jQuery("#order").val();
+            datalist[5]=jQuery("#statuss").val();  
+            jQuery.ajax({
+                url:"<?php echo 'http://'.URL_CONFIG;?>/public/admin/index/addsponsors",
+                type:"POST",
+                data:{data:datalist},
+                success:function(result){
+                    alert(result);
+                }
+            });
+
+        });
+        jQuery("#btn_reset").click(function(){
+            if(url_logo!=""){
+                var root_base='<?php echo ROOT_CONFIG;?>';
+                var file = root_base+url_logo;
+                jQuery.ajax({
+                    url:"<?php echo 'http://'.URL_CONFIG;?>/public/admin/index/deletefile",
+                    type:"POST",
+                    data:{data:file},
+                    success:function(result){
+                        jQuery("#files li").remove();
+                    }
+                });
+            }
+        });
+    });
+    
+</script>

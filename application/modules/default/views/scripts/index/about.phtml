@@ -1,0 +1,72 @@
+<div id="breadcrumb">
+    <ul>
+        <li><a href="<?php echo $this->url(array ( 'action'=> 'index','controller'=> 'index', 'module'=> 'default'),null,true )?>" title="Home">Home</a></li>
+        <li class="separate"></li>
+        <li class="current"><a href="" title="About">About</a></li>
+    </ul>
+</div>
+<div class="content_news_left fl">
+    <div id="about">
+        <div class="title_block_about"><span class="text">
+            <?php
+                if(isset($this->typeAboutID) && count($this->typeAboutID)>0){
+                    echo $this->typeAboutID[0]['name'];
+                }
+            ?>
+        </span></div>
+        
+        <div class="content_block_about">
+            <p>The individual board members are happy to answer questions in their specific areas:</p>
+            <?php
+                if(isset($this->data) && count($this->data)>0){
+                    $i=0;
+                    foreach ($this->data as $row) {
+                        if($i++==count($this->data)-1){?>
+                            <div class="items_about last">
+                                <a href="<?php echo $this->url(array ( 'action'=> 'detailabout','controller'=> 'index', 'module'=> 'default','id'=>$row['id']) ); ?>" class="img fl"><img width="120" height="149" src="<?php echo 'http://'.URL_CONFIG.$row['image']; ?>" alt="<?php echo $row['name']; ?>" /></a>
+                                <span class="name"><a href="<?php echo $this->url(array ( 'action'=> 'detailabout','controller'=> 'index', 'module'=> 'default','id'=>$row['id']) ); ?>"><?php echo $row['name']; ?></a></span>
+                                <span class="address"><?php echo $row['address']; ?></span>
+                                <span class="email">[<a href="mailto:<?php echo $row['email']; ?>"><?php echo $row['email']; ?></a>]</span>
+                                <div class="description"><?php echo $row['introductions']; ?></div>
+                                <div class="clearfix"></div>
+                            </div>
+
+                        <?php }else{?>
+                            <div class="items_about">
+                                <a href="<?php echo $this->url(array ( 'action'=> 'detailabout','controller'=> 'index', 'module'=> 'default','id'=>$row['id']) ); ?>" class="img fl"><img width="120" height="149" src="<?php echo 'http://'.URL_CONFIG.$row['image']; ?>" alt="<?php echo $row['name']; ?>" /></a>
+                                <span class="name"><a href="<?php echo $this->url(array ( 'action'=> 'detailabout','controller'=> 'index', 'module'=> 'default','id'=>$row['id']) ); ?>"><?php echo $row['name']; ?></a></span>
+                                <span class="address"><?php echo $row['address']; ?></span>
+                                <span class="email">[<a href="mailto:<?php echo $row['email']; ?>"><?php echo $row['email']; ?></a>]</span>
+                                <div class="description"><?php echo $row['introductions']; ?></div>
+                                <div class="clearfix"></div>
+                            </div>
+                    <?php
+                        }
+                    }
+
+                }
+            ?>
+        </div>
+    </div>
+
+</div>
+<div class="content_news_right fr">
+    <div class="block_right_about">
+        <div class="title"><span class="text">About aAti</span></div>
+        <div class="content_about">
+            <ul>
+                <?php 
+                    if(isset($this->typeAbout)){  
+                        foreach ($this->typeAbout as $result) {?>
+                            <li><a href="<?php echo $this->url(array ( 'action'=> 'about','controller'=> 'index', 'module'=> 'default','id'=>$result['id']) ); ?>"><?php echo $result['name']; ?></a></li>
+                    <?php
+                        }
+                    }
+                ?>
+            </ul>
+        </div>
+    </div>
+    <?php require ("block_login.phtml"); ?>
+    <?php require ("block_important.phtml"); ?>
+    <?php require ("block_connect.phtml"); ?>
+</div>

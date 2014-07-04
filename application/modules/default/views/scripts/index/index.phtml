@@ -1,0 +1,152 @@
+<?php require_once 'common.php';?>
+<div class="content_left fl">
+	<div id="block_welcome">
+    	<div class="title_block">
+        	<span class="text">Welcome to the ATI Website</span>
+        </div>
+        <div class="content_block">
+        	<?php
+        		if(isset($this->welcome)){
+        			echo splitString($this->welcome[0]['content'],600);
+        		}
+        	?>
+        </div>
+    </div>
+    <div id="block_last_events">
+    	<div class="title_block"><span class="text">Latest Events</span></div>
+        <div class="content_block">
+        	<ul>
+        		<?php
+        			$lastevent = $this->lastevent;
+        			foreach ($lastevent as $row) {?>
+        				<li>
+		                	<a href="<?php echo $this->url(array ( 'action'=> 'eventnews','controller'=> 'index', 'module'=> 'default','id'=>$row['id']) ); ?>" class="fl"><img src="<?php echo 'http://'.URL_CONFIG.$row['image']; ?>" alt="<?php echo $row['title']; ?>" width="100" height="75" /></a>
+		                    <span class="time"><?php echo date("l, d F Y", strtotime($row['date'])); ?></span>
+		                    <span class="title"><a href="<?php echo $this->url(array ( 'action'=> 'eventnews','controller'=> 'index', 'module'=> 'default','id'=>$row['id']) ); ?>"><?php echo $row['title']; ?></a></span>
+		                    <span class="description"><?php echo splitString($row['description'],90);?></span>
+		                </li>
+        		<?php
+        			}
+        		?>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="content_right fr">
+	 <div id="block_news">
+    	<div class="title_block"><span class="text">IN THE NEWS</span></div>
+        <div class="content_block">
+        	<div class="content_news fl">
+            	<ul>
+                    <?php
+                        foreach ($this->news as $row) {?>
+                            <li>
+                                <a class="title_news" href="<?php echo $this->url(array ( 'action'=> 'normalnews','controller'=> 'index', 'module'=> 'default','id'=>$row['id']) ); ?>"><?php echo splitString($row['title'],35); ?></a>
+                                <div class="detail_news"><?php echo splitString($row['description'],180); ?></div>
+                            </li>
+                    <?php
+                        }
+                    ?>
+                    <li><a href="<?php echo $this->url(array ( 'action'=> 'news','controller'=> 'index', 'module'=> 'default') ); ?>" class="view_all"></a></li>
+                </ul>
+            </div>
+            <div class="block_login right">
+            	<div class="title_login"><span>Login</span></div>
+                <div class="content_login">
+                    <?php
+                        if(isset($this->userinfo)){
+                            $user = $this->userinfo;
+                            ?>
+                            <p style="padding:0px 0px 0px 8px;">Hi <a href="<?php echo $this->url(array ( 'action'=> 'editaccount','controller'=> 'index', 'module'=> 'default') ); ?>"><?php echo $user->username; ?></a>, Welcome to website</p>
+
+                            <a style="padding:5px 0px 5px 8px;display: block" href="<?php echo $this->url(array ( 'action'=> 'logout','controller'=> 'index', 'module'=> 'default') ); ?>">Logout</a>
+                        <?php
+                        }else{
+                    ?>
+                	<form action="#" method="post">
+                    	<label>Username</label>
+                        <input type="text" name="username" id="username" />
+                        <label>Password</label>
+                        <input type="password" name="password" id="password" />
+                        <input type="hidden" name="currentUrl" id="currentUrl" value="<?php echo (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"]=="on") ? "https://" : "http://".$_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"]; ?>">
+                        <input type="button" name="login" value="login" id="btn_login" />
+                        <ul>
+                        	<li><a href="<?php echo $this->url(array ( 'action'=> 'forgotpass','controller'=> 'index', 'module'=> 'default') ); ?>">Forgot your password?</a></li>
+                            <li><a href="<?php echo $this->url(array ( 'action'=> 'forgotuser','controller'=> 'index', 'module'=> 'default') ); ?>">Forgot your username?</a></li>
+                            <li><a href="<?php echo $this->url(array ( 'action'=> 'register','controller'=> 'index', 'module'=> 'default') ); ?>">Create an account</a></li>
+                        </ul>
+                    </form>
+                    <?php }?>
+                    <script type="text/javascript">
+                        jQuery(document).ready(function() {
+                            jQuery("#btn_login").click(function(){
+                                var username = jQuery("#username").val();
+                                var password = jQuery("#password").val();
+                                var remember=0;
+                                if ($('#remember').is(":checked"))
+                                {
+                                    remember=1;
+                                }
+                                var currentUrl = jQuery("#currentUrl").val();
+                                jQuery.ajax({
+                                    url:"<?php echo 'http://'.URL_CONFIG;?>/public/default/index/login",
+                                    type:"POST",
+                                    data:{username:username,password:password,remember:remember,currentUrl:currentUrl},
+                                    success:function(result){
+                                        location.href=currentUrl;
+                                    }
+                                });
+
+                            });
+                        });
+                        
+                    </script>
+                </div>
+            </div>
+            <div class="block_important right">
+            	<div class="title_important">Important Links</div>
+                <div class="content_important">
+                	<ul>
+                		<?php
+                			foreach ($this->link as $row) {
+                				echo "<li><a href=\"".$row['link']."\">".$row['title']."</a></li>";
+                			}
+                		 ?>
+                    </ul>
+                </div>
+            </div>
+            <div class="block_connect right">
+            	<div class="title_connect">Connect with ATI</div>
+                <div class="content_connect">
+                	<ul>
+                		<?php
+                			foreach ($this->connect as $row) {
+                				echo "<li><a href=\"".$row['link']."\"><img src=\"".'http://'.URL_CONFIG.$row['icon']."\" alt=\"".$row['title']."\"/></a></li>";
+                			}
+                		 ?>
+                    </ul>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+     </div>
+     <div id="block_sponsors">
+        <div class="title_block"><span class="text">Sponsors</span></div>
+        <div class="content_block">
+        	<ul>
+        		<?php
+        			foreach ($this->sponsors as $row) {
+        				echo "<li><a href=\"". $row['link']."\"><img src=\"".'http://'.URL_CONFIG.$row['image']."\" alt=\"".$row['name']."\" /></a></li>";
+        			}
+        		 ?>
+            </ul>
+        </div>
+     </div>
+    <?php print_r($this->Form)?>
+</div>
+<a href="http://docs.google.com/viewer?url=http%3A%2F%2Ftdn12.zz.mu%2Fraovat.doc">View</a>
+
+<a href="http://docs.google.com/viewer?url=http%3A%2F%2Ftdn12.zz.mu%2Fcv.doc">View</a>
+
+<iframe height="1000px" width="900px"  src="https://docs.google.com/document/d/1ej5FOBuaHO8CjIyxE3axzTuPCF3M79Yx5jco6HmOjms/pub?widget=true&amp;headers=false"></iframe>
+

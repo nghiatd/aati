@@ -1,0 +1,14 @@
+#list_user thead th.header{
+	background: url(../images/table-sort.png);
+	background-repeat: no-repeat;
+	background-position: right 15px; 
+	cursor: pointer;
+}
+#list_user thead th.asc{
+	background: url(../images/table-sort.png) no-repeat right -13px;
+	cursor: pointer;
+}
+#list_user thead th.desc{
+	background: url(../images/table-sort.png) no-repeat right -45px;
+	cursor: pointer;
+}

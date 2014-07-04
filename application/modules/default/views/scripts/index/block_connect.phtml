@@ -1,0 +1,12 @@
+<div class="block_connect">
+    <div class="title_connect">Connect with ATI</div>
+    <div class="content_connect">
+      <ul>
+        <?php
+          foreach ($this->connect as $row) {
+            echo "<li><a href=\"".$row['link']."\"><img src=\"".'http://'.URL_CONFIG.$row['icon']."\" alt=\"".$row['title']."\"/></a></li>";
+          }
+         ?>
+      </ul>
+    </div>
+  </div>

@@ -1,0 +1,5 @@
+RewriteEngine On
+RewriteCond %{HTTP_HOST} ^localhost/AATI$ [OR]
+RewriteCond %{HTTP_HOST} ^www.localhost/AATI$
+RewriteCond %{REQUEST_URI} !^/public/
+RewriteRule (.*) /public/$1

@@ -1,0 +1,259 @@
+<div class="grid_4">
+    <div class="da-panel collapsible">
+        <div class="da-panel-header">
+            <span class="da-panel-title">
+                <img src="images/icons/black/16/computer_imac.png" alt="Panel" />
+                Add News
+            </span>
+
+        </div>
+        <div class="da-panel-content">
+
+            <script type="text/javascript">
+                jQuery(document).ready(function() {
+                    jQuery("form#da-ex-dialog-form-val").validate({
+                        rules:{
+                            reqTitle:{required:true},
+                            reqOrder:{required:true,digits:true}},
+                        invalidHandler:function(f,d){
+                            var g=d.numberOfInvalids();
+                            if(g){var e=g==1?"You missed 1 field. It has been highlighted":"You missed "+g+" fields. They have been highlighted";
+                                jQuery("#da-validate-error").html(e).show()
+                            }else{
+                                jQuery("#da-validate-error").hide()
+                            }
+                        },
+                        success: function(label) {
+                             
+                           },
+                        submitHandler: function(form) { 
+                            var title = jQuery("#title").val();
+                            var image = url_logo;
+                            var des = jQuery("#description").val();
+                            var content = CKEDITOR.instances['content'].getData();
+                            var link = jQuery("#link").val();
+                            var author = jQuery("#author").val();
+                            var typeNews = jQuery("#typeNews").val();
+                            var order = jQuery("#order").val();
+                            var status = jQuery("#statuss").val();
+                            var fullDate = new Date();                                          
+                            //convert month to 2 digits
+                            var twoDigitMonth = ((fullDate.getMonth().length+1) === 1)? (fullDate.getMonth()+1) : '0' + (fullDate.getMonth()+1);
+                              
+                            var dateModified = fullDate.getFullYear() + "-" + twoDigitMonth + "-" + fullDate.getDate();
+                            var datalist=new Array();
+                                datalist[0]= title;
+                                datalist[1]= des; 
+                                datalist[2]= content;
+                                datalist[3]= dateModified;
+                                datalist[4]= image;
+                                datalist[5]= typeNews;  
+                                datalist[6]= link;  
+                                datalist[7]= author;  
+                                datalist[8]= order; 
+                                datalist[9]= status;
+                            jQuery.ajax({
+                                url:"<?php echo 'http://'.URL_CONFIG;?>/public/admin/index/savenews",
+                                type:"POST",
+                                data:{data:datalist},
+                                success:function(result){
+                                    alert(result);
+                                    form.submit();
+                                }
+                            });
+                        }
+
+                    });
+                    jQuery("#da-ex-dialog-form").bind("click",function(d){
+                        jQuery("#da-ex-dialog-form-div").dialog("option",{modal:true}).dialog("open");
+                        d.preventDefault();
+                    });
+                    var baseUrl = jQuery("#baseUrl").val();
+                    CKEDITOR.replace( 'content',{
+                        filebrowserBrowseUrl : 'http://'+baseUrl+'/public/ckeditor/ckfinder/ckfinder.html?id=demo3',
+                        filebrowserImageBrowseUrl : 'http://'+baseUrl+'/public/ckeditor/ckfinder/ckfinder.html?Type=Images&id=demo3',
+                        filebrowserFlashBrowseUrl : 'http://'+baseUrl+'/public/ckeditor/ckfinder/ckfinder.html?Type=Flash&id=demo3',
+                        filebrowserUploadUrl : 'http://'+baseUrl+'/public/ckeditor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files&currentFolder=/Public%20Folder&id=demo3',
+                        filebrowserImageUploadUrl : 'http://'+baseUrl+'/public/ckeditor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images&currentFolder=/Public%20Folder&id=demo3',
+                        filebrowserFlashUploadUrl : 'http://'+baseUrl+'/public/ckeditor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash&currentFolder=/Public%20Folder&id=demo3'
+                    });
+                    //Replace title to convert to link
+                    jQuery("#title").change(function(){
+                        var str = jQuery(this).val();
+                        var replace_str = str.replace(/ /g, "-");
+                        jQuery("#link").val(replace_str);
+                    });
+                });
+                
+                
+            </script>
+            <div id="da-ex-dialog-form-div" class="no-padding">
+                <form id="da-ex-dialog-form-val" class="da-form">
+
+                    <div id="da-validate-error" class="da-message error" style="display:none;"></div>
+
+                    <div class="da-form-inline">
+
+                        <div class="da-form-row">
+
+                            <label>Title:</label>
+
+                            <div class="da-form-item large">
+
+                                <input type="text" name="reqTitle" id="title" />
+
+                            </div>
+
+                        </div>
+                        <div class="da-form-row">
+                            <label>Image:</label>
+                            <div class="da-form-item large">
+                                <input type="file" id="file-upload" class=" da-custom-file customfile-input" style="left: -14px; top: 15px; ">
+
+                            <span id="status" ></span>
+        
+                            <ul id="files" ></ul>
+                            <script type="text/javascript" >
+                                var url_logo="";
+                                $(function(){
+                                var btnUpload=$('#file-upload');
+                                var status=$('#status');
+                                var folder="<?php echo ROOT_CONFIG.'/public/data/news/'?>";
+                                new AjaxUpload(btnUpload, {
+                                    action: '<?php echo "http://".URL_CONFIG."/public/admin/index/uploadimagenews";?>',
+                                    name: 'uploadfile',
+                                    onSubmit: function(file, ext){
+                                         if (! (ext && /^(jpg|png|jpeg|gif)$/.test(ext))){ 
+                                            // extension is not allowed 
+                                            status.text('Only JPG, PNG or GIF files are allowed');
+                                            return false;
+                                        }
+                                        status.text('Uploading...');
+                                    },
+                                    onComplete: function(file, response){
+                                        //On completion clear the status
+                                        status.text('');
+                                        //Add uploaded file to list
+                                        if(response==="success"){
+                                            var src='<?php echo "http://".URL_CONFIG."/public/data/news/";?>'+file;
+                                            url_logo='<?php echo "/public/data/news/";?>'+file;
+                                            var image="<img src='"+src+"'/>";
+                                            var name="<br/>"+file;
+                                            $('<li></li>').appendTo('#files').html(image+name).addClass('success');
+                                        } else{
+                                            $('<li></li>').appendTo('#files').text(file).addClass('error');
+                                        }
+                                    }
+                                });
+
+                                });
+                                </script>
+
+                            </div>
+                        </div>
+                        <div class="da-form-row">
+                            <label>Description:</label>
+
+                            <div class="da-form-item large">
+                                <textarea id="description" name="description"></textarea>
+                            </div>
+
+                        </div>
+                        <div class="da-form-row">
+                            <label>Content:</label>
+
+                            <div class="da-form-item large">
+                                <form class="da-form">
+
+                                    <div id="content" name="content" id="content"></div>
+                                </form>
+
+                            </div>
+
+                        </div>
+                        <div class="da-form-row">
+
+                            <label>Link:</label>
+
+                            <div class="da-form-item large">
+
+                                <input type="text" name="reqLink" id="link" />
+
+                            </div>
+
+                        </div>
+
+                        <div class="da-form-row">
+
+                            <label>Author:</label>
+
+                            <div class="da-form-item large">
+
+                                <input type="text" name="reqAuthor" id="author" />
+
+                            </div>
+
+                        </div>
+                        <div class="da-form-row">
+                            <label>Type news:</label>
+                            <div class="da-form-item small">
+                                <select name="reqTypenews" id="typeNews">
+                                    <?php
+                                        foreach ($this->data as $row) {
+                                            echo "<option value=\"".$row['id']."\">".$row['name']."</option>";
+                                        }
+                                     ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="da-form-row">
+
+                            <label>Order:</label>
+
+                            <div class="da-form-item small">
+
+                                <input type="text" name="reqOrder" id="order"/>
+
+                            </div>
+
+                        </div>
+                        <div class="da-form-row">
+                            <label>Status:</label>
+                            <div class="da-form-item small">
+                                <select name="reqStatus" id="statuss">
+                                    <option value="1">Enable</option>
+                                    <option value="0">Disable</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="da-button-row">
+                            <input type="reset" value="Reset" class="da-button gray left" id="btn_reset"/>
+                            <input type="submit" value="Add" class="da-button pink" id="btn_add_news"/>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        
+        jQuery("#btn_reset").click(function(){
+            if(url_logo!=""){
+                var root_base='<?php echo ROOT_CONFIG;?>';
+                var file = root_base+url_logo;
+                jQuery.ajax({
+                    url:"<?php echo 'http://'.URL_CONFIG;?>/public/admin/index/deletefile",
+                    type:"POST",
+                    data:{data:file},
+                    success:function(result){
+                        jQuery("#files li").remove();
+                    }
+                });
+            }
+        });
+    });
+    
+</script>

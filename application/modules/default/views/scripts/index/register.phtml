@@ -1,0 +1,188 @@
+<script type="text/javascript">
+	jQuery(document).ready(function() {
+		var baseUrl = jQuery("#baseUrl").val();
+        CKEDITOR.replace( 'description',{
+            filebrowserBrowseUrl : 'http://'+baseUrl+'/public/ckeditor/ckfinder/ckfinder.html?id=demo3',
+            filebrowserImageBrowseUrl : 'http://'+baseUrl+'/public/ckeditor/ckfinder/ckfinder.html?Type=Images&id=demo3',
+            filebrowserFlashBrowseUrl : 'http://'+baseUrl+'/public/ckeditor/ckfinder/ckfinder.html?Type=Flash&id=demo3',
+            filebrowserUploadUrl : 'http://'+baseUrl+'/public/ckeditor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files&currentFolder=/Public%20Folder&id=demo3',
+            filebrowserImageUploadUrl : 'http://'+baseUrl+'/public/ckeditor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images&currentFolder=/Public%20Folder&id=demo3',
+            filebrowserFlashUploadUrl : 'http://'+baseUrl+'/public/ckeditor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash&currentFolder=/Public%20Folder&id=demo3'
+        });
+	});
+	
+</script>
+<div class="content_news_left fl">
+  <div class="lostpass" style="height:auto;width: 680px;padding-left: 10px;margin-left: 20px;">
+  <h3>REGISTER A ACCOUNT</h3><br /><br />
+  <p>PLEASE NOTE THAT ALL FIELDS ARE COMPULSORY </p>
+    <form  action="" method="post" enctype="multipart/form-data" id="da-ex-dialog-form-val">
+      <table align="center" cellpadding="0" cellspacing="0">
+        <tbody>
+          
+        
+          <tr>
+         
+            <td  colspan="2"></td>
+          </tr>
+          <tr><td colspan="2"><br /></td></tr>
+          <tr >
+            <td style="text-align: right;padding:5px">Username:</td>
+            <td class="boderemail" style="text-align: left;color:red" ><input id="username" name="username" title="username"  style="width:200px;" maxlength="250" type="text">(*)</td>
+          </tr>
+          <tr>
+            <td style="text-align: right;padding:5px">Password:</td>
+            <td class="boderemail" style="text-align: left;color:red" ><input  id="password" name="password" title="password"  style="width:200px;" maxlength="250" type="password">(*)</td>
+          </tr>
+          <tr>
+            <td style="text-align: right;padding:5px">Company:</td>
+            <td class="boderemail" style="text-align: left;color:red" ><input  id="company" name="company" title="company"  style="width:200px;" maxlength="250" type="text">(*)</td>
+          </tr>
+          <tr>
+            <td style="text-align: right;padding:5px">Logo:</td>
+            <td class="boderemail" style="text-align: left;color:red" ><div class="da-form-item large">
+                    <input type="file" id="file-upload" class=" da-custom-file customfile-input" style="left: -14px; top: 15px; ">
+
+	                <span id="status" ></span>
+
+	                <ul id="files" ></ul>
+	                <script type="text/javascript" >
+	                    var url_logo="";
+	                    $(function(){
+	                    var btnUpload=$('#file-upload');
+	                    var status=$('#status');
+	                    var folder="<?php echo ROOT_CONFIG.'/public/data/news/'?>";
+	                    new AjaxUpload(btnUpload, {
+	                        action: '<?php echo "http://".URL_CONFIG."/public/admin/index/uploadimagenews";?>',
+	                        name: 'uploadfile',
+	                        onSubmit: function(file, ext){
+	                             if (! (ext && /^(jpg|png|jpeg|gif)$/.test(ext))){ 
+	                                // extension is not allowed 
+	                                status.text('Only JPG, PNG or GIF files are allowed');
+	                                return false;
+	                            }
+	                            status.text('Uploading...');
+	                        },
+	                        onComplete: function(file, response){
+	                            //On completion clear the status
+	                            status.text('');
+	                            //Add uploaded file to list
+	                            if(response==="success"){
+	                                var src='<?php echo "http://".URL_CONFIG."/public/data/news/";?>'+file;
+	                                url_logo='<?php echo "/public/data/news/";?>'+file;
+	                                var image="<img src='"+src+"'/>";
+	                                var name="<br/>"+file;
+	                                $('<li></li>').appendTo('#files').html(image+name).addClass('success');
+	                            } else{
+	                                $('<li></li>').appendTo('#files').text(file).addClass('error');
+	                            }
+	                        }
+	                    });
+
+	                    });
+	                    </script>
+
+	                </div></td>
+          </tr>
+          <tr>
+            <td style="text-align: right;padding:5px">Address:</td>
+            <td class="boderemail" style="text-align: left;color:red" ><input  id="address" name="address" title="address"  style="width:200px;" maxlength="250" type="text">(*)</td>
+          </tr>
+          <tr>
+            <td style="text-align: right;padding:5px">Description:</td>
+            <td class="boderemail" style="text-align: left;color:red" ><div id="description"></div></td>
+          </tr>
+          <tr>
+            <td style="text-align: right;padding:5px">Email:</td>
+            <td class="boderemail" style="text-align: left;color:red" ><input  id="email" name="email" title="email"  style="width:200px;" maxlength="250" type="text">(*)</td>
+          </tr>
+          <tr>
+            <td style="text-align: right;padding:5px">Phone:</td>
+            <td class="boderemail" style="text-align: left;color:red" ><input  id="phone" name="phone" title="phone"  style="width:200px;" maxlength="250" type="text"></td>
+          </tr>
+          <tr>
+            <td style="text-align: right;padding:5px">Fax:</td>
+            <td class="boderemail" style="text-align: left;color:red" ><input  id="fax" name="fax" title="fax"  style="width:200px;" maxlength="250" type="text"></td>
+          </tr>
+          <tr>
+            <td style="text-align: right;padding:5px">Website:</td>
+            <td class="boderemail" style="text-align: left;color:red" ><input  id="website" name="website" title="website"  style="width:200px;" maxlength="250" type="text"></td>
+          </tr>
+          <tr>
+            <td style="text-align: right;"></td>
+            <td style="text-align: left;"><input  value="Reset" type="reset" style="padding:5px; margin:10px;"><input  value="submit" type="submit" style="padding:5px; margin:10px;"></td>
+          </tr>
+          </tbody>
+      </table>
+    </form>
+  <script type="text/javascript">
+    jQuery(document).ready(function() {
+      jQuery("form#da-ex-dialog-form-val").validate({
+            rules:{
+                company:{required:true},
+                address:{required:true},
+                email:{required:true,email:true},
+                username:{required:true},
+                password:{required:true}},
+            invalidHandler:function(f,d){
+                var g=d.numberOfInvalids();
+                if(g){var e=g==1?"You missed 1 field. It has been highlighted":"You missed "+g+" fields. They have been highlighted";
+                    jQuery("#da-validate-error").html(e).show()
+                }else{
+                    jQuery("#da-validate-error").hide()
+                }
+            },
+            success: function(label) {
+                 
+               },
+            submitHandler: function(form) { 
+                var company = jQuery("#company").val();
+                var image = url_logo;
+                var address = jQuery("#address").val();
+                var description = CKEDITOR.instances['description'].getData();
+                var email = jQuery("#email").val();
+                var phone = jQuery("#phone").val();
+                var fax = jQuery("#fax").val();
+                var website = jQuery("#website").val();
+                var username = jQuery("#username").val();
+                var pass = jQuery("#password").val();
+                var status = 0;
+                var fullDate = new Date();                                          
+                //convert month to 2 digits
+                var twoDigitMonth = ((fullDate.getMonth().length+1) === 1)? (fullDate.getMonth()+1) : '0' + (fullDate.getMonth()+1);
+                  
+                var dateModified = fullDate.getFullYear() + "-" + twoDigitMonth + "-" + fullDate.getDate();
+                var datalist=new Array();
+                    datalist[0]= username;
+                    datalist[1]= pass; 
+                    datalist[2]= company;
+                    datalist[3]= image;
+                    datalist[4]= address;
+                    datalist[5]= description;  
+                    datalist[6]= email;  
+                    datalist[7]= phone;  
+                    datalist[8]= fax; 
+                    datalist[9]= website;
+                    datalist[10]= dateModified;
+                    datalist[11]= status;
+                jQuery.ajax({
+                    url:"<?php echo 'http://'.URL_CONFIG;?>/public/default/index/saveuser",
+                    type:"POST",
+                    data:{data:datalist},
+                    success:function(result){
+                        alert(result);
+                        form.submit();
+                    }
+                });
+            }
+        });
+    });
+    
+  </script>
+  </div>
+</div>
+<div class="content_news_right fr">
+	<?php require ("block_login.phtml"); ?>
+  	<?php require ("block_important.phtml"); ?>
+  	<?php require ("block_connect.phtml"); ?>
+</div>

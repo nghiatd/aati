@@ -1,0 +1,191 @@
+<div class="grid_4">
+    <h1>
+        <?php echo $this->heading;?></h1>
+    <div class="grid_4">
+        <div class="da-panel">
+            <div class="da-panel-header">
+                <span class="da-panel-title">
+                    <img src="images/icons/black/16/pencil.png" alt="" />
+                    Edit infomation account
+                </span>
+            </div>
+            
+            <div class="da-panel-content">
+                <form class="da-form" id="da-ex-dialog-form-val">
+                    
+                    <div class="da-form-row">
+                        <label>Full name:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="fullname" name="fullname" value=""/>
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Birthday:</label>
+                        <div class="da-form-item">
+                            <input id="birthday" type="text" class="hasDatepicker">
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Gender:</label>
+                        <div class="da-form-item large">
+                            <ul class="da-form-list">
+                                <li> <label><input type="radio" name="gender" id="male" checked="checked">Male</label></li>
+                                <li> <label><input type="radio" name="gender" id="female">Female</label></li>
+                            </ul>
+                            <label for="gender" class="error" generated="true" style="display:none;"></label>
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Address:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="address" name="address" value="" />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Phone:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="phone" name="phone" value="" />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Email:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="email" name="email" value="" />
+                        </div>
+                    </div>
+                    <div class="da-panel">
+            <div class="da-panel-header">
+                <span class="da-panel-title">
+                    <img src="images/icons/color/cog.png" alt="" />
+                    Edit account
+                </span>
+            </div>
+            <div class="da-panel-content">
+                <form class="da-form">
+                    <div class="da-form-row">
+                        <label>Username:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="username" name="username" value="" placeholder="Input your account..."  />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Password:</label>
+                        <div class="da-form-item large">
+                            <input type="password" id="pass" name="pass" value="" placeholder="Input your password..." />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Confirm password:</label>
+                        <div class="da-form-item large">
+                            <input type="password" id="repass" name="repass" value="" placeholder="Re-Input your password..." />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Permission:</label>
+                        <div class="da-form-item small">
+                            <select name="dd1" id="idPer">
+                                <?php
+                                    foreach ($this->data as $row) {
+                                        echo "<option value=\"".$row['id']."\">".$row['name']."</option>";
+                                    }
+                                 ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Status:</label>
+                        <div class="da-form-item small">
+                            <select name="reqStatus" id="statuss">
+                                <option value="1">Enable</option>
+                                <option value="0">Disable</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="da-button-row">
+                        <input type="reset" value="Reset" class="da-button gray left" />
+                        <input type="submit" value="Submit" id="btn_add_admin" class="da-button red" />
+                    </div>
+                </form>
+            </div>
+        </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        jQuery("form#da-ex-dialog-form-val").validate({
+            rules:{
+                fullname:{required:true,minlength:2},
+                phone:{required:true,digits:true},
+                email:{required:true,email:true},
+                username:{required:true,minlength:3},
+                pass:{required:true,minlength:5},
+                repass:{required:true,minlength:5,equalTo:"#pass"}},
+            invalidHandler:function(f,d){
+                var g=d.numberOfInvalids();
+                if(g){var e=g==1?"You missed 1 field. It has been highlighted":"You missed "+g+" fields. They have been highlighted";
+                    jQuery("#da-validate-error").html(e).show()
+                }else{
+                    jQuery("#da-validate-error").hide()
+                }
+            },
+            success: function(label) {
+                 
+               },
+            submitHandler: function(form) {
+               // do other stuff for a valid form
+                
+                var fullDate = new Date();                                          
+                //convert month to 2 digits
+                var twoDigitMonth = ((fullDate.getMonth().length+1) === 1)? (fullDate.getMonth()+1) : '0' + (fullDate.getMonth()+1);
+                  
+                var dateModified = fullDate.getFullYear() + "-" + twoDigitMonth + "-" + fullDate.getDate();
+                    var fullname = jQuery("#fullname").val();
+                    var address = jQuery("#address").val();
+                    var phone = jQuery("#phone").val();
+                    var email = jQuery("#email").val();
+                    var username = jQuery("#username").val();
+                    var password = jQuery("#pass").val();
+                    var perID=jQuery("#idPer").val();
+                    var birthday = jQuery("#birthday").val();
+
+                    var gender = 1;
+                    if(jQuery("#male").is(":checked")){
+                        gender=1;
+                    }else{
+                        gender=0;
+                    }
+                    var date = dateModified;
+                    var status= jQuery("#statuss").val();
+
+                    var datalist=new Array();
+                        datalist[0]= username;
+                        datalist[1]= password; 
+                        datalist[2]= fullname;
+                        datalist[3]= gender;
+                        datalist[4]= birthday;
+                        datalist[5]= address;  
+                        datalist[6]= email;  
+                        datalist[7]= phone;  
+                        datalist[8]= perID; 
+                        datalist[9]= date;
+                        datalist[10]= status;
+                    jQuery.ajax({
+                        url:"<?php echo 'http://'.URL_CONFIG;?>/public/admin/index/saveadmin",
+                        type:"POST",
+                        data:{data:datalist},
+                        success:function(result){
+                            alert(result);
+                            form.submit();
+                        }
+                    });
+                
+           }
+        });
+    });
+    
+</script>

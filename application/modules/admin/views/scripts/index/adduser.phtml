@@ -1,0 +1,305 @@
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        jQuery("form#da-ex-dialog-form-val").validate({
+            rules:{
+                company:{required:true},
+                address:{required:true},
+                email:{required:true,email:true},
+                username:{required:true},
+                pass:{required:true},
+                repass:{required:true},
+                reqStatus:{required:true}},
+            invalidHandler:function(f,d){
+                var g=d.numberOfInvalids();
+                if(g){var e=g==1?"You missed 1 field. It has been highlighted":"You missed "+g+" fields. They have been highlighted";
+                    jQuery("#da-validate-error").html(e).show()
+                }else{
+                    jQuery("#da-validate-error").hide()
+                }
+            },
+            success: function(label) {
+                 
+               },
+            submitHandler: function(form) { 
+                var company = jQuery("#company").val();
+                var image = url_logo;
+                var address = jQuery("#address").val();
+                var description = CKEDITOR.instances['description'].getData();
+                var email = jQuery("#email").val();
+                var phone = jQuery("#phone").val();
+                var fax = jQuery("#fax").val();
+                var website = jQuery("#website").val();
+                var username = jQuery("#username").val();
+                var pass = jQuery("#pass").val();
+                var repass = jQuery("#repass").val();
+                var status = jQuery("#statuss").val();
+                var fullDate = new Date();                                          
+                //convert month to 2 digits
+                var twoDigitMonth = ((fullDate.getMonth().length+1) === 1)? (fullDate.getMonth()+1) : '0' + (fullDate.getMonth()+1);
+                  
+                var dateModified = fullDate.getFullYear() + "-" + twoDigitMonth + "-" + fullDate.getDate();
+                var datalist=new Array();
+                    datalist[0]= username;
+                    datalist[1]= pass; 
+                    datalist[2]= company;
+                    datalist[3]= image;
+                    datalist[4]= address;
+                    datalist[5]= description;  
+                    datalist[6]= email;  
+                    datalist[7]= phone;  
+                    datalist[8]= fax; 
+                    datalist[9]= website;
+                    datalist[10]= dateModified;
+                    datalist[11]= status;
+                jQuery.ajax({
+                    url:"<?php echo 'http://'.URL_CONFIG;?>/public/admin/index/saveuser",
+                    type:"POST",
+                    data:{data:datalist},
+                    success:function(result){
+                        alert(result);
+                        form.submit();
+                    }
+                });
+            }
+        });
+        jQuery("#da-ex-dialog-form").bind("click",function(d){
+            jQuery("#da-ex-dialog-form-div").dialog("option",{modal:true}).dialog("open");
+            d.preventDefault();
+        });
+        var baseUrl = jQuery("#baseUrl").val();
+        CKEDITOR.replace( 'description',{
+            filebrowserBrowseUrl : 'http://'+baseUrl+'/public/ckeditor/ckfinder/ckfinder.html?id=demo3',
+            filebrowserImageBrowseUrl : 'http://'+baseUrl+'/public/ckeditor/ckfinder/ckfinder.html?Type=Images&id=demo3',
+            filebrowserFlashBrowseUrl : 'http://'+baseUrl+'/public/ckeditor/ckfinder/ckfinder.html?Type=Flash&id=demo3',
+            filebrowserUploadUrl : 'http://'+baseUrl+'/public/ckeditor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files&currentFolder=/Public%20Folder&id=demo3',
+            filebrowserImageUploadUrl : 'http://'+baseUrl+'/public/ckeditor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images&currentFolder=/Public%20Folder&id=demo3',
+            filebrowserFlashUploadUrl : 'http://'+baseUrl+'/public/ckeditor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash&currentFolder=/Public%20Folder&id=demo3'
+        });
+        
+    });
+</script>
+<div class="grid_4">
+    <h1>
+        <?php echo $this->heading;?></h1>
+    <div class="grid_4">
+        <div class="da-panel">
+            <div class="da-panel-header">
+                <span class="da-panel-title">
+                    <img src="images/icons/black/16/pencil.png" alt="" />
+                    Edit infomation user
+                </span>
+            </div>
+            
+            <div class="da-panel-content">
+                <form class="da-form" id="da-ex-dialog-form-val">
+                    
+                    <div class="da-form-row">
+                        <label>Company:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="company" name="company" value=""/>
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Logo:</label>
+                        <div class="da-form-item large">
+                            <input type="file" id="file-upload" class=" da-custom-file customfile-input" style="left: -14px; top: 15px; ">
+
+                        <span id="status" ></span>
+
+                        <ul id="files" ></ul>
+                        <script type="text/javascript" >
+                            var url_logo="";
+                            $(function(){
+                            var btnUpload=$('#file-upload');
+                            var status=$('#status');
+                            var folder="<?php echo ROOT_CONFIG.'/public/data/user/'?>";
+                            new AjaxUpload(btnUpload, {
+                                action: '<?php echo "http://".URL_CONFIG."/public/admin/index/uploadimageuser";?>',
+                                name: 'uploadfile',
+                                onSubmit: function(file, ext){
+                                     if (! (ext && /^(jpg|png|jpeg|gif)$/.test(ext))){ 
+                                        // extension is not allowed 
+                                        status.text('Only JPG, PNG or GIF files are allowed');
+                                        return false;
+                                    }
+                                    status.text('Uploading...');
+                                },
+                                onComplete: function(file, response){
+                                    //On completion clear the status
+                                    status.text('');
+                                    //Add uploaded file to list
+                                    if(response==="success"){
+                                        var src='<?php echo "http://".URL_CONFIG."/public/data/user/";?>'+file;
+                                        url_logo='<?php echo "/public/data/user/";?>'+file;
+                                        var image="<img src='"+src+"'/>";
+                                        var name="<br/>"+file;
+                                        $('<li></li>').appendTo('#files').html(image+name).addClass('success');
+                                    } else{
+                                        $('<li></li>').appendTo('#files').text(file).addClass('error');
+                                    }
+                                }
+                            });
+
+                            });
+                            </script>
+
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Address:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="address" name="address" value="" />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Description:</label>
+                        <div class="da-form-item large">
+                            <div type="text" id="description"></div>
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Email:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="email" name="email" value="" />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Phone:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="phone" name="phone" value="" />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Fax:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="fax" name="fax" value="" />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Website:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="website" name="website" value="" />
+                        </div>
+                    </div>
+                    <div class="da-panel">
+            <div class="da-panel-header">
+                <span class="da-panel-title">
+                    <img src="images/icons/color/cog.png" alt="" />
+                    Add information login
+                </span>
+            </div>
+            <div class="da-panel-content">
+                <form class="da-form">
+                    <div class="da-form-row">
+                        <label>Username:</label>
+                        <div class="da-form-item large">
+                            <input type="text" id="username" name="username" value="" placeholder="Input your account..."  />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Password:</label>
+                        <div class="da-form-item large">
+                            <input type="password" id="pass" name="pass" value="" placeholder="Input your password..." />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Confirm password:</label>
+                        <div class="da-form-item large">
+                            <input type="password" id="repass" name="repass" value="" placeholder="Re-Input your password..." />
+                        </div>
+                    </div>
+                    <div class="da-form-row">
+                        <label>Status:</label>
+                        <div class="da-form-item small">
+                            <select name="reqStatus" id="statuss">
+                                <option value="1">Enable</option>
+                                <option value="0">Disable</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="da-button-row">
+                        <input type="reset" value="Reset" class="da-button gray left" />
+                        <input type="submit" value="Submit" id="btn_add_user" class="da-button red" />
+                    </div>
+                </form>
+            </div>
+        </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        jQuery("form#da-ex-dialog-form-val").validate({
+            rules:{
+                fullname:{required:true,minlength:2},
+                phone:{required:true,digits:true},
+                email:{required:true,email:true},
+                username:{required:true,minlength:3},
+                pass:{required:true,minlength:5},
+                repass:{required:true,minlength:5,equalTo:"#pass"}},
+            invalidHandler:function(f,d){
+                var g=d.numberOfInvalids();
+                if(g){var e=g==1?"You missed 1 field. It has been highlighted":"You missed "+g+" fields. They have been highlighted";
+                    jQuery("#da-validate-error").html(e).show()
+                }else{
+                    jQuery("#da-validate-error").hide()
+                }
+            },
+            success: function(label) {
+                 
+               },
+            submitHandler: function(form) {
+               // do other stuff for a valid form
+                
+                var fullDate = new Date();                                          
+                //convert month to 2 digits
+                var twoDigitMonth = ((fullDate.getMonth().length+1) === 1)? (fullDate.getMonth()+1) : '0' + (fullDate.getMonth()+1);
+                  
+                var dateModified = fullDate.getFullYear() + "-" + twoDigitMonth + "-" + fullDate.getDate();
+                    var fullname = jQuery("#fullname").val();
+                    var address = jQuery("#address").val();
+                    var phone = jQuery("#phone").val();
+                    var email = jQuery("#email").val();
+                    var username = jQuery("#username").val();
+                    var password = jQuery("#pass").val();
+                    var birthday = jQuery("#birthday").val();
+
+                    var gender = 1;
+                    if(jQuery("#male").is(":checked")){
+                        gender=1;
+                    }else{
+                        gender=0;
+                    }
+                    var date = dateModified;
+                    var status= jQuery("#statuss").val();
+
+                    var datalist=new Array();
+                        datalist[0]= username;
+                        datalist[1]= password; 
+                        datalist[2]= fullname;
+                        datalist[3]= gender;
+                        datalist[4]= birthday;
+                        datalist[5]= address;  
+                        datalist[6]= email;  
+                        datalist[7]= phone;  
+                        datalist[8]= date; 
+                        datalist[9]= status;
+                    jQuery.ajax({
+                        url:"<?php echo 'http://'.URL_CONFIG;?>/public/admin/index/saveuser",
+                        type:"POST",
+                        data:{data:datalist},
+                        success:function(result){
+                            alert(result);
+                            //form.submit();
+                        }
+                    });
+                
+           }
+        });
+    });
+    
+</script>
